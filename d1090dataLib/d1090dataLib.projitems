@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>01d3cbcc-b37f-4e09-960c-092615535fc2</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>d1090dataLib</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)bsDB-connection\BaseStation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acCsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acCsvWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acDbWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acRec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aircraftsDB\AircraftsDB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aplib\apCsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aplib\apCsvWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aplib\apDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aplib\apGeoWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aplib\apRec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aplib\apSqlWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aplib\apTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-coordlib\ConvConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-coordlib\Dms.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-coordlib\LatLon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-flightsDB\FlightsDB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-navlib\navCsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-navlib\navDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-navlib\navGeoWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-navlib\navRec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-navlib\navTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtCsvWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtDbWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtRec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtSqlWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtTsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActDbWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActRec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoBsReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoCsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoCsvWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoDbReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoDbWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoJsonXsvWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoRec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoSqlWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoTsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\JsonParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-awylib\awyDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-awylib\awyGeoWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-awylib\awyReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-awylib\awyRec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-awylib\awyTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-navlib\fixReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-navlib\navDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-navlib\navGeoWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-navlib\navReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-navlib\navRec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)xp11-navlib\navTable.cs" />
+  </ItemGroup>
+</Project>

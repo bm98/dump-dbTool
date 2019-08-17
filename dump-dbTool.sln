@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "d1090fa-dblib.test", "d1090fa-dblib.test\d1090fa-dblib.test.csproj", "{FF51CF24-B867-4FE2-A217-14823A2E6690}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dumpDbBrowser", "dumpDbBrowser\dumpDbBrowser.csproj", "{509D4E5E-3324-4DFC-82D0-179AA2F3A5F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "d1090ext-coordlib-test", "d1090ext-coordlib-test\d1090ext-coordlib-test.csproj", "{6FB66723-7F6E-4409-9063-3D4D706C9BA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dump1090-dbTool", "dump1090-dbTool\dump1090-dbTool.csproj", "{1129C63E-CF80-4787-B3C0-F497D7A3C6B7}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "d1090dataLib", "d1090dataLib\d1090dataLib.shproj", "{01D3CBCC-B37F-4E09-960C-092615535FC2}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		d1090dataLib\d1090dataLib.projitems*{01d3cbcc-b37f-4e09-960c-092615535fc2}*SharedItemsImports = 13
+		d1090dataLib\d1090dataLib.projitems*{1129c63e-cf80-4787-b3c0-f497d7a3c6b7}*SharedItemsImports = 4
+		d1090dataLib\d1090dataLib.projitems*{509d4e5e-3324-4dfc-82d0-179aa2f3a5f1}*SharedItemsImports = 4
+		d1090dataLib\d1090dataLib.projitems*{6fb66723-7f6e-4409-9063-3d4d706c9ba4}*SharedItemsImports = 4
+		d1090dataLib\d1090dataLib.projitems*{ff51cf24-b867-4fe2-a217-14823a2e6690}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF51CF24-B867-4FE2-A217-14823A2E6690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF51CF24-B867-4FE2-A217-14823A2E6690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF51CF24-B867-4FE2-A217-14823A2E6690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF51CF24-B867-4FE2-A217-14823A2E6690}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509D4E5E-3324-4DFC-82D0-179AA2F3A5F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509D4E5E-3324-4DFC-82D0-179AA2F3A5F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509D4E5E-3324-4DFC-82D0-179AA2F3A5F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509D4E5E-3324-4DFC-82D0-179AA2F3A5F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FB66723-7F6E-4409-9063-3D4D706C9BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FB66723-7F6E-4409-9063-3D4D706C9BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FB66723-7F6E-4409-9063-3D4D706C9BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FB66723-7F6E-4409-9063-3D4D706C9BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1129C63E-CF80-4787-B3C0-F497D7A3C6B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1129C63E-CF80-4787-B3C0-F497D7A3C6B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1129C63E-CF80-4787-B3C0-F497D7A3C6B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1129C63E-CF80-4787-B3C0-F497D7A3C6B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B544B378-3C70-4085-94B1-5C0E90CFF64C}
+	EndGlobalSection
+EndGlobal

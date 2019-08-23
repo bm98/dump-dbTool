@@ -11,12 +11,14 @@ namespace d1090dataLib.d1090fa_dblib
   /// </summary>
   public class icaoDatabase
   {
-    private const string m_PREFIX = "0123456789ABCDEF";
+    private const string m_PREFIX = "0123456789ABCDEF"; // Valid Hex string ModeS prefixes
+    // number index by prefix character translation table
     private readonly byte[] m_INDEX = new byte[] {0,1,2,3,4,5,6,7,8,9, // 0..9
                                                   0,0,0,0,0,0,0,
                                                   10,11,12,13,14,15}; // A..F
     private int dbIndex( char dbPrefix ) { return m_INDEX[dbPrefix - m_PREFIX[0]]; } // UCase HEX Prefix only
 
+    // Array of modeS subtables (prefixed)
     private icaoTable[] m_db = null;
 
     /// <summary>
@@ -33,7 +35,7 @@ namespace d1090dataLib.d1090fa_dblib
     /// <summary>
     /// Add one record to the database
     /// </summary>
-    /// <param name="rec"></param>
+    /// <param name="rec">A new record to add</param>
     public string Add( icaoRec rec )
     {
       if ( rec != null ) {
@@ -46,7 +48,7 @@ namespace d1090dataLib.d1090fa_dblib
     }
 
     /// <summary>
-    /// Return the number of entried in the database
+    /// Return the number of entries in the database
     /// </summary>
     public int Count
     {
@@ -104,12 +106,12 @@ namespace d1090dataLib.d1090fa_dblib
     /// </summary>
     /// <param name="icaoPrefix">The leading part of the ICAO key</param>
     /// <returns>The number of entries</returns>
-    public int GetSubtableEntries( string icaoPrefix )
+    public int GetSubtableCount( string icaoPrefix )
     {
       if ( string.IsNullOrEmpty( icaoPrefix ) ) return 0;
       char dbPrefix = icaoPrefix[0];
 
-      return m_db[dbIndex( dbPrefix )].GetSubtableEntries( icaoPrefix );
+      return m_db[dbIndex( dbPrefix )].GetSubtableCount( icaoPrefix );
     }
 
   }

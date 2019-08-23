@@ -6,7 +6,7 @@ using System.IO;
 namespace d1090dataLib.d1090fa_dblib
 {
   /// <summary>
-  /// Reads a FlightAware Icao Database into a IcaoTable
+  /// Reads a FlightAware ModeS Database into a IcaoTable
   /// </summary>
   public class icaoDbReader
   {
@@ -28,19 +28,19 @@ namespace d1090dataLib.d1090fa_dblib
       }
     }
 
-
     /// <summary>
-    /// Reads one db file
+    /// Reads one file to fill the db
     /// </summary>
+    /// <param name="db">The navDatabase to fill</param>
     /// <param name="fName">The qualified filename</param>
-    /// <returns>A table or null</returns>
-    private string ReadDbFile(ref icaoDatabase db, string fName )
+    /// <returns>The result string, either empty or error</returns>
+    private static string ReadDbFile(ref icaoDatabase db, string fName )
     {
       if ( !File.Exists( fName ) ) {
         return $"File {fName} does not exist\n";
       }
 
-      var icaoPre = Path.GetFileNameWithoutExtension( fName );
+      var icaoPre = Path.GetFileNameWithoutExtension( fName ).ToUpperInvariant();
       string ret = "";
       using ( var sr = new StreamReader( fName ) ) {
         string buffer = sr.ReadToEnd( );
@@ -50,8 +50,8 @@ namespace d1090dataLib.d1090fa_dblib
         while (!string.IsNullOrEmpty(fragment)) {
           buffer = buffer.Substring( fragment.Length+1 ); // remove extracted + comma
           var rec = FromNative( fragment );
+          rec.AddPrefix( icaoPre );   // make it a valid one - the FA db icao is without the prefix from the file...
           if ( rec.IsValid ) {
-            rec.icao = icaoPre.ToUpperInvariant( ) + rec.icao; // make it a valid one
             ret += db.Add( rec ); // collecting add information
           }
           fragment = JsonParser.ExtractFragment( buffer );
@@ -60,13 +60,13 @@ namespace d1090dataLib.d1090fa_dblib
       return ret;
     }
 
-
     /// <summary>
     /// Reads all data from the given folder
     /// </summary>
+    /// <param name="db">The icaoDatabase to fill</param>
     /// <param name="dbFolder">A fully qualified path to where the db files are located</param>
-    /// <returns>A populated table or null</returns>
-    public string ReadDb( ref icaoDatabase db, string dbFolder )
+    /// <returns>The result string, either empty or error</returns>
+    public static string ReadDb( ref icaoDatabase db, string dbFolder )
     {
       if ( !Directory.Exists( dbFolder ) ) return $"Folder {dbFolder} does not exist\n"; ;
       string ret = "";

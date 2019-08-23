@@ -4,6 +4,9 @@ using System.Text;
 
 namespace d1090dataLib.xp11_awylib
 {
+  /// <summary>
+  /// One XPlane 11 Airway database record
+  /// </summary>
   public class awyRec
   {
     // fields in db

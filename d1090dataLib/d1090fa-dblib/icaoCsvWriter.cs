@@ -13,7 +13,12 @@ namespace d1090dataLib.d1090fa_dblib
 
     const string PREFIXES = "0123456789ABCDEF";
 
-    private void WriteFile( StreamWriter sw, icaoTable subTable )
+    /// <summary>
+    /// Writes one file from the given sub table
+    /// </summary>
+    /// <param name="sw">Stream to write to</param>
+    /// <param name="subTable">The subtable to write out</param>
+    private static void WriteFile( StreamWriter sw, icaoTable subTable )
     {
       foreach ( var rec in subTable ) {
         sw.WriteLine( rec.Value.AsCsv( ) );
@@ -21,7 +26,13 @@ namespace d1090dataLib.d1090fa_dblib
     }
 
 
-    public bool WriteCsv( icaoDatabase db, Stream csvOutStream )
+    /// <summary>
+    /// Write the ModeS db as CSV formatted file
+    /// </summary>
+    /// <param name="db">The database to dump</param>
+    /// <param name="csvOutStream">The stream to write to</param>
+    /// <returns>True for success</returns>
+    public static bool WriteCsv( icaoDatabase db, Stream csvOutStream )
     {
       using ( var sw = new StreamWriter( csvOutStream, Encoding.UTF8 ) ) {
         sw.WriteLine( icaoRec.CsvHeader );

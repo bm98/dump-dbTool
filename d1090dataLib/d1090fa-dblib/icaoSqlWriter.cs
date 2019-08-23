@@ -7,13 +7,18 @@ namespace d1090dataLib.d1090fa_dblib
 {
   /// <summary>
   /// Creates SQLite Insert Statements
+  /// Assumes the db contains a table 'fa_modes (icao, registration,airctype,manufacturer,aircname,operator_)'
   /// </summary>
   public class icaoSqlWriter
   {
     private const string PREFIXES = "0123456789ABCDEF";
 
-    // write prefixed section
-    // <returns>String as result either empty or error</returns>
+    /// <summary>
+    /// Exec INSERT statements for an aircraft subtable
+    /// </summary>
+    /// <param name="sqConnection">The db connection</param>
+    /// <param name="subTable">The subtable to dump</param>
+    /// <returns>The result string, either empty or error</returns>
     private static void WriteFile( SQLiteConnection sqConnection, icaoTable subTable )
     {
       using ( SQLiteCommand sqlite_cmd = sqConnection.CreateCommand( ) ) {
@@ -26,11 +31,11 @@ namespace d1090dataLib.d1090fa_dblib
     }
 
     /// <summary>
-    /// Write complete db as INSERT statements
+    /// Write complete aircraft db into the supplied database as one transaction
     /// </summary>
-    /// <param name="db">The icao db</param>
-    /// <param name="csvOutStream"></param>
-    /// <returns>String as result either empty or error</returns>
+    /// <param name="db">The aircraft db to dump</param>
+    /// <param name="sqConnection">The db connection</param>
+    /// <returns>The result string, either empty or error</returns>
     public static string WriteSqDB( icaoDatabase db, SQLiteConnection sqConnection)
     {
       using ( SQLiteCommand sqlite_cmd = sqConnection.CreateCommand( ) ) {

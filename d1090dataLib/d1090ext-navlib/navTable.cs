@@ -8,7 +8,7 @@ using static d1090dataLib.d1090ext_navlib.navRec;
 namespace d1090dataLib.d1090ext_navlib
 {
   /// <summary>
-  /// contains all icao airport records
+  /// contains all icao navaids records
   /// </summary>
   public class navTable : SortedDictionary<string, navRec>
   {
@@ -18,7 +18,7 @@ namespace d1090dataLib.d1090ext_navlib
     }
 
     /// <summary>
-    /// Create an ICAO table from the given table
+    /// Create an Navaids table from the given table
     /// </summary>
     /// <param name="prefix">The prefix of the table</param>
     /// <param name="table">The source to fill from</param>
@@ -31,7 +31,7 @@ namespace d1090dataLib.d1090ext_navlib
     /// <summary>
     /// Add one record to the table
     /// </summary>
-    /// <param name="rec"></param>
+    /// <param name="rec">A Navaid record to add</param>
     public string Add( navRec rec )
     {
       string ret = "";
@@ -66,6 +66,10 @@ namespace d1090dataLib.d1090ext_navlib
     }
 
 
+    /// <summary>
+    /// Adds a table to this table (omitting key dupes)
+    /// </summary>
+    /// <param name="selection">Enumerated Key Value pairs to add to this table</param>
     private string AddSubtable( IEnumerable<KeyValuePair<string, navRec>> selection )
     {
       string ret = "";
@@ -79,6 +83,14 @@ namespace d1090dataLib.d1090ext_navlib
     }
 
 
+    /// <summary>
+    /// Returns a subtable with items that match the given criteria
+    /// </summary>
+    /// <param name="rangeLimitNm">Range Limit in nm</param>
+    /// <param name="Lat">Center Lat (decimal)</param>
+    /// <param name="Lon">Center Lon (decimal)</param>
+    /// <param name="navTypes">Type of nav items to include</param>
+    /// <returns>A table with selected records</returns>
     public navTable GetSubtable( double rangeLimitNm, double Lat, double Lon, NavTypes[] navTypes = null )
     {
       if ( navTypes == null ) navTypes = new NavTypes[] { NavTypes.All };

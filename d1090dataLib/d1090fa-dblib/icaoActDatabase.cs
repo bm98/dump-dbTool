@@ -22,7 +22,7 @@ namespace d1090dataLib.d1090fa_dblib
     /// <summary>
     /// Add one record to the database
     /// </summary>
-    /// <param name="rec"></param>
+    /// <param name="rec">A new record</param>
     public string Add( icaoActRec rec )
     {
       if ( rec != null ) {

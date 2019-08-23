@@ -71,8 +71,7 @@ namespace dumpDbBrowser
         string folder = OFD.FileName;
         folder = Path.GetDirectoryName( folder );
         RTB.Text += $"Reading Json Db: {folder}\n";
-        var ir = new icaoDbReader( );
-        string changes = ir.ReadDb( ref IDB, folder );
+        string changes = icaoDbReader.ReadDb( ref IDB, folder );
         changes += $"DONE \n";
         changes += $"Database contains {IDB.Count} records \n";
         RTB.Text += changes;
@@ -85,9 +84,8 @@ namespace dumpDbBrowser
       OFD.Filter = "TSV files|*.tsv|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new icaoTsvReader( );
         RTB.Text += $"Reading TSV: {file}\n";
-        string changes = ir.ReadDb( ref IDB, file ); ;
+        string changes = icaoTsvReader.ReadDb( ref IDB, file ); ;
         changes += $"DONE \n";
         changes += $"Database contains {IDB.Count} records \n";
         RTB.Text += changes;
@@ -120,31 +118,28 @@ namespace dumpDbBrowser
       string folder = Path.Combine( @"D:\DUMPTEST", IDB_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
-      var iw = new icaoDbWriter( );
-      iw.WriteDb( IDB, folder );
+      icaoDbWriter.WriteDb( IDB, folder );
       RTB.Text += $"JsonDB ModeS written\n";
     }
 
     private void btWriteIcaoCSV_Click( object sender, EventArgs e )
     {
-      var iw = new icaoCsvWriter( );
       string folder = Path.Combine( @"D:\DUMPTEST", CSV_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
       using ( var outS = File.Create( Path.Combine( folder, "fa-data-" + DateTime.Now.ToString( DATETIME ) + ".csv" ) ) ) {
-        iw.WriteCsv( IDB, outS );
+        icaoCsvWriter.WriteCsv( IDB, outS );
       }
       RTB.Text += $"CSV Icao ModeS file written\n";
     }
 
     private void btWriteIcaoJsonCSV_Click( object sender, EventArgs e )
     {
-      var iw = new icaoJsonXsvWriter( );
       string folder = Path.Combine( @"D:\DUMPTEST", CSV_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
       using ( var outS = File.Create( Path.Combine( folder, "fa-data-json-" + DateTime.Now.ToString( DATETIME ) + ".csv" ) ) ) {
-        iw.WriteCsv( IDB, outS );
+        icaoJsonXsvWriter.WriteCsv( IDB, outS );
       }
       RTB.Text += $"CSV (Json) Icao ModeS file written\n";
     }
@@ -173,9 +168,8 @@ namespace dumpDbBrowser
       OFD.Filter = "CSV files|*.csv|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new acCsvReader( );
         RTB.Text += $"Reading Aircraft CSV: {file}\n";
-        string changes = ir.ReadDb( ref ACDB, file ); ;
+        string changes = acCsvReader.ReadDb( ref ACDB, file ); ;
         changes += $"DONE \n";
         changes += $"Database contains {ACDB.Count} records \n";
         RTB.Text += changes;
@@ -188,11 +182,10 @@ namespace dumpDbBrowser
 
     private void btWriteAircraftDB_Click( object sender, EventArgs e )
     {
-      var iw = new acDbWriter( );
       string folder = Path.Combine( @"D:\DUMPTEST", ACDB_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
-      iw.WriteDb( ACDB, folder );
+      acDbWriter.WriteDb( ACDB, folder );
       RTB.Text += $"JsonDB Aircraft written\n";
     }
 
@@ -216,9 +209,8 @@ namespace dumpDbBrowser
       OFD.Filter = "TSV files|*.tsv|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new rtTsvReader( );
         RTB.Text += $"Reading Route TSV: {file}\n";
-        string changes = ir.ReadDb( ref RTDB, file ); ;
+        string changes = rtTsvReader.ReadDb( ref RTDB, file ); ;
         changes += $"DONE \n";
         changes += $"Database contains {RTDB.Count} records \n";
         RTB.Text += changes;
@@ -227,22 +219,20 @@ namespace dumpDbBrowser
 
     private void btWriteRouteDb_Click( object sender, EventArgs e )
     {
-      var iw = new rtDbWriter( );
       string folder = Path.Combine( @"D:\DUMPTEST", RTDB_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
-      iw.WriteDb( RTDB, folder );
+      rtDbWriter.WriteDb( RTDB, folder );
       RTB.Text += $"JsonDB Route written\n";
     }
 
     private void btWriteRtCSV_Click( object sender, EventArgs e )
     {
-      var iw = new rtCsvWriter( );
       string folder = Path.Combine( @"D:\DUMPTEST", CSV_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
       using ( var outS = File.Create( Path.Combine( folder, "route-" + DateTime.Now.ToString( DATETIME ) + ".csv" ) ) ) {
-        iw.WriteCsv( RTDB, outS );
+        rtCsvWriter.WriteCsv( RTDB, outS );
       }
       RTB.Text += $"CSV Route file written\n";
     }
@@ -274,9 +264,8 @@ namespace dumpDbBrowser
       OFD.Filter = "CSV files|*.csv|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new apCsvReader( );
         RTB.Text += $"Reading Airport CSV: {file}\n";
-        string changes = ir.ReadDb( ref APDB, file ); ;
+        string changes = apCsvReader.ReadDb( APDB, file ); ;
         changes += $"DONE \n";
         changes += $"Database contains {APDB.Count} records \n";
         RTB.Text += changes;
@@ -285,19 +274,17 @@ namespace dumpDbBrowser
 
     private void btWriteAirportCsv_Click( object sender, EventArgs e )
     {
-      var iw = new apCsvWriter( );
       string folder = Path.Combine( @"D:\DUMPTEST", CSV_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
       using ( var outS = File.Create( Path.Combine( folder, "airport-" + DateTime.Now.ToString( DATETIME ) + ".csv" ) ) ) {
-        iw.WriteCsv( APDB, outS );
+        apCsvWriter.WriteCsv( APDB, outS );
       }
       RTB.Text += $"CSV Airport file written\n";
     }
 
     private void btWriteAirportGJson_Click( object sender, EventArgs e )
     {
-      var iw = new apGeoWriter( );
       string folder = Path.Combine( @"D:\DUMPTEST", CSV_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
@@ -305,12 +292,12 @@ namespace dumpDbBrowser
         // limit by range and also by type
         // making two sets here, one for mid-large Apts and one for all others
         using ( var outS = File.Create( Path.Combine( folder, "apt-midlarge-region-" + DateTime.Now.ToString( DATETIME ) + ".geojson" ) ) ) {
-          iw.WriteGeoJson( APDB, outS,
+          apGeoWriter.WriteGeoJson( APDB, outS,
           double.Parse( txRangeLimit.Text ), double.Parse( txMyLat.Text ), double.Parse( txMyLon.Text ),
           new apRec.AptTypes[] { apRec.AptTypes.medium_airport, apRec.AptTypes.large_airport } );
         }
         using ( var outS = File.Create( Path.Combine( folder, "apt-others-region-" + DateTime.Now.ToString( DATETIME ) + ".geojson" ) ) ) {
-          iw.WriteGeoJson( APDB, outS,
+          apGeoWriter.WriteGeoJson( APDB, outS,
           double.Parse( txRangeLimit.Text ), double.Parse( txMyLat.Text ), double.Parse( txMyLon.Text ),
           new apRec.AptTypes[] { apRec.AptTypes.balloonport, apRec.AptTypes.closed, apRec.AptTypes.heliport,
                                  apRec.AptTypes.seaplane_base, apRec.AptTypes.small_airport, apRec.AptTypes.Other } );
@@ -318,7 +305,7 @@ namespace dumpDbBrowser
       }
       else {
         using ( var outS = File.Create( Path.Combine( folder, "apt-all-" + DateTime.Now.ToString( DATETIME ) + ".geojson" ) ) ) {
-          iw.WriteGeoJson( APDB, outS );
+          apGeoWriter.WriteGeoJson( APDB, outS );
         }
       }
       RTB.Text += $"GeoJson Airport file written\n";
@@ -331,9 +318,8 @@ namespace dumpDbBrowser
       OFD.Filter = "CSV files|*.csv|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new navLib.navCsvReader( );
         RTB.Text += $"Reading Navaid CSV: {file}\n";
-        string changes = ir.ReadDb( ref NAVDB, file ); ;
+        string changes = navLib.navCsvReader.ReadDb( ref NAVDB, file ); ;
         changes += $"DONE \n";
         changes += $"Database contains {NAVDB.Count} records \n";
         RTB.Text += changes;
@@ -342,7 +328,6 @@ namespace dumpDbBrowser
 
     private void btWriteNavGJson_Click( object sender, EventArgs e )
     {
-      var iw = new navLib.navGeoWriter( );
       string folder = Path.Combine( @"D:\DUMPTEST", CSV_PATH );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
@@ -350,12 +335,12 @@ namespace dumpDbBrowser
         // limit by range and also by type
         // making two sets here, one for NDBs and one for all others
         using ( var outS = File.Create( Path.Combine( folder, "nav-ndb-region-" + DateTime.Now.ToString( DATETIME ) + ".geojson" ) ) ) {
-          iw.WriteGeoJson( NAVDB, outS,
+          navLib.navGeoWriter.WriteGeoJson( NAVDB, outS,
           double.Parse( txRangeLimit.Text ), double.Parse( txMyLat.Text ), double.Parse( txMyLon.Text ),
           new navLib.navRec.NavTypes[] { navLib.navRec.NavTypes.NDB, navLib.navRec.NavTypes.NDB_DME } );
         }
         using ( var outS = File.Create( Path.Combine( folder, "nav-vordme-region-" + DateTime.Now.ToString( DATETIME ) + ".geojson" ) ) ) {
-          iw.WriteGeoJson( NAVDB, outS,
+          navLib.navGeoWriter.WriteGeoJson( NAVDB, outS,
           double.Parse( txRangeLimit.Text ), double.Parse( txMyLat.Text ), double.Parse( txMyLon.Text ),
           new navLib.navRec.NavTypes[] { navLib.navRec.NavTypes.DME, navLib.navRec.NavTypes.TACAN,
                                                   navLib.navRec.NavTypes.VOR, navLib.navRec.NavTypes.VORTAC,
@@ -364,7 +349,7 @@ namespace dumpDbBrowser
       }
       else {
         using ( var outS = File.Create( Path.Combine( folder, "nav-all-" + DateTime.Now.ToString( DATETIME ) + ".geojson" ) ) ) {
-          iw.WriteGeoJson( NAVDB, outS );
+          navLib.navGeoWriter.WriteGeoJson( NAVDB, outS );
         }
       }
       RTB.Text += $"GeoJson Navaids file written\n";
@@ -376,9 +361,8 @@ namespace dumpDbBrowser
       OFD.Filter = "DAT files|*.dat|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new navReader( );
         RTB.Text += $"Reading XP11 Nav DAT: {file}\n";
-        string changes = ir.ReadDb( ref XNAVDB, file ); ;
+        string changes = navReader.ReadDb( ref XNAVDB, file ); ;
         changes += $"DONE \n";
         changes += $"Database contains {XNAVDB.Count} records \n";
         RTB.Text += changes;
@@ -391,9 +375,8 @@ namespace dumpDbBrowser
       OFD.Filter = "DAT files|*.dat|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new fixReader( );
         RTB.Text += $"Reading XP11 Fix DAT: {file}\n";
-        string changes = ir.ReadDb( ref XNAVDB, file ); ;
+        string changes = fixReader.ReadDb( ref XNAVDB, file ); ;
         changes += $"DONE \n";
         changes += $"Database contains now {XNAVDB.Count} records \n";
         RTB.Text += changes;
@@ -406,9 +389,8 @@ namespace dumpDbBrowser
       OFD.Filter = "DAT files|*.dat|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new awyReader( );
         RTB.Text += $"Reading XP11 Awy DAT: {file}\n";
-        string changes = ir.ReadDb( ref XAWYDB, file ); ;
+        string changes = awyReader.ReadDb( ref XAWYDB, file ); ;
         changes += $"DONE \n";
         changes += $"Database contains {XAWYDB.Count} records \n";
         RTB.Text += changes;
@@ -473,8 +455,7 @@ namespace dumpDbBrowser
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
         RTB.Text += $"Reading ICAO Aircraft Type Json Db: {file}\n";
-        var ir = new icaoActReader( );
-        string changes = ir.ReadDb( ref ACTDB, file );
+        string changes = icaoActReader.ReadDb( ref ACTDB, file );
         changes += $"DONE \n";
         changes += $"Database contains {ACTDB.Count} records \n";
         RTB.Text += changes;
@@ -484,8 +465,7 @@ namespace dumpDbBrowser
     private void btWriteIcaoAct_Click( object sender, EventArgs e )
     {
       string file = Path.Combine( @"D:\DUMPTEST", IDB_PATH , "aircraft_types" , "icao_aircraft_types.json ");
-      var iw = new icaoActDbWriter( );
-      iw.WriteDb( ACTDB, file );
+      icaoActDbWriter.WriteDb( ACTDB, file );
       RTB.Text += $"JsonDB ModeS written\n";
     }
 

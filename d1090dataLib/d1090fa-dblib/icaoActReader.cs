@@ -51,11 +51,12 @@ namespace d1090dataLib.d1090fa_dblib
 
 
     /// <summary>
-    /// Reads one db file
+    /// Reads all data from the given folder
     /// </summary>
-    /// <param name="fName">The qualified filename</param>
-    /// <returns>A table or null</returns>
-    public string ReadDb( ref icaoActDatabase db, string fName )
+    /// <param name="db">The icaoActDatabase to fill</param>
+    /// <param name="dbFolder">A fully qualified name</param>
+    /// <returns>The result string, either empty or error</returns>
+    public static string ReadDb( ref icaoActDatabase db, string fName )
     {
       if ( !File.Exists( fName ) ) {
         return $"File {fName} does not exist\n";

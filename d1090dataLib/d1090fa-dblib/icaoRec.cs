@@ -35,7 +35,6 @@ namespace d1090dataLib.d1090fa_dblib
     private static string icaoSanity(string icaoSrc )
     {
       string ret = icaoSrc.ToUpperInvariant( ); // use UCase only here
-      if ( ret.Length != 6 ) return ""; // FAIL length does not match
       if ( !long.TryParse( ret, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long test ) ) return ""; // FAIL not hex
 
       return ret;
@@ -70,6 +69,15 @@ namespace d1090dataLib.d1090fa_dblib
     }
 
     /// <summary>
+    /// Add the prefix to complete the ModeS name
+    /// </summary>
+    /// <param name="prefix">The filename prefix missing from the native record</param>
+    public void AddPrefix(string prefix )
+    {
+      this.icao = icaoSanity( prefix + this.icao );
+    }
+
+    /// <summary>
     /// Update this rec with values from AC record
     /// </summary>
     /// <param name="ac"></param>
@@ -83,11 +91,10 @@ namespace d1090dataLib.d1090fa_dblib
       operator_ = ( string.IsNullOrEmpty( operator_ ) ) ? ac.operator_ : operator_; // this has precedence
     }
 
-
     /// <summary>
     /// returns true if the record is valid
     /// </summary>
-    public bool IsValid { get => ( !string.IsNullOrEmpty( icao ) ); }
+    public bool IsValid { get => ( icao.Length == 6 ); } // FAIL length does not match
 
     /// <summary>
     /// Returns the content in Json Notation for csv use

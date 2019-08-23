@@ -62,9 +62,10 @@ namespace d1090dataLib.d1090ext_navlib
     /// <summary>
     /// Reads one db file
     /// </summary>
+    /// <param name="db">The navDatabase to fill from the file</param>
     /// <param name="fName">The qualified filename</param>
-    /// <returns>A table or null</returns>
-    private string ReadDbFile( ref navDatabase db, string fName )
+    /// <returns>The result string, either empty or error</returns>
+    private static string ReadDbFile( ref navDatabase db, string fName )
     {
       var icaoPre = Path.GetFileNameWithoutExtension( fName );
       string ret = "";
@@ -84,11 +85,12 @@ namespace d1090dataLib.d1090ext_navlib
     }
 
     /// <summary>
-    /// Reads all data from the given folder
+    /// Reads all data from the given file
     /// </summary>
-    /// <param name="tsvFile">A fully qualified path to where the db files are located</param>
-    /// <returns>A populated table or null</returns>
-    public string ReadDb( ref navDatabase db, string csvFile )
+    /// <param name="db">The navDatabase to fill from the file</param>
+    /// <param name="csvFile">The file to read</param>
+    /// <returns>The result string, either empty or error</returns>
+    public static string ReadDb( ref navDatabase db, string csvFile )
     {
       if ( !File.Exists( csvFile ) ) return $"File does not exist\n";
 

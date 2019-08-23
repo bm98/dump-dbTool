@@ -5,16 +5,19 @@ using System.Text;
 namespace d1090dataLib.d1090ext_aclib
 {
   /// <summary>
-  /// The icao database
+  /// The icao Aircraft database
+  /// Handles the FA db with ModeS prefix for their Json file database
   /// </summary>
   public class acDatabase
   {
-    private const string m_PREFIX = "0123456789ABCDEF";
+    private const string m_PREFIX = "0123456789ABCDEF"; // Valid Hex string ModeS prefixes
+    // number index by prefix character translation table
     private readonly byte[] m_INDEX = new byte[] {0,1,2,3,4,5,6,7,8,9, // 0..9
                                                   0,0,0,0,0,0,0,
                                                   10,11,12,13,14,15}; // A..F
     private int dbIndex( char dbPrefix ) { return m_INDEX[dbPrefix - m_PREFIX[0]]; }
 
+    // Array of aircraft subtables (prefixed)
     private acTable[] m_db = null;
 
     /// <summary>
@@ -29,9 +32,9 @@ namespace d1090dataLib.d1090ext_aclib
     }
 
     /// <summary>
-    /// Add one record to the table
+    /// Add one record to the database
     /// </summary>
-    /// <param name="rec"></param>
+    /// <param name="rec">A new record to add</param>
     public string Add( acRec rec )
     {
       if ( rec != null ) {
@@ -43,6 +46,9 @@ namespace d1090dataLib.d1090ext_aclib
       return "";
     }
 
+    /// <summary>
+    /// Returns the number of records in the database
+    /// </summary>
     public int Count
     {
       get {
@@ -77,7 +83,7 @@ namespace d1090dataLib.d1090ext_aclib
       if ( string.IsNullOrEmpty( icaoPrefix ) ) return 0;
       char dbPrefix = icaoPrefix[0];
 
-      return m_db[dbIndex( dbPrefix )].GetSubtableEntries( icaoPrefix );
+      return m_db[dbIndex( dbPrefix )].GetSubtableCount( icaoPrefix );
     }
 
 

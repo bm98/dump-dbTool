@@ -14,7 +14,7 @@ namespace d1090dataLib.d1090fa_dblib
     /// Translates from native to generic record format
     /// </summary>
     /// <param name="native"></param>
-    /// <returns></returns>
+    /// <returns>A icaoRec </returns>
     private static icaoRec FromNative( string native )
     {
       // should be the TSV variant
@@ -37,9 +37,10 @@ namespace d1090dataLib.d1090fa_dblib
     /// <summary>
     /// Reads one db file
     /// </summary>
+    /// <param name="db">The icaoDatabase to fill from the file</param>
     /// <param name="fName">The qualified filename</param>
-    /// <returns>Result as string or empty if ok</returns>
-    private string ReadDbFile( ref icaoDatabase db, string fName )
+    /// <returns>The result string, either empty or error</returns>
+    private static string ReadDbFile( ref icaoDatabase db, string fName )
     {
       var icaoPre = Path.GetFileNameWithoutExtension( fName );
       string ret = "";
@@ -59,11 +60,12 @@ namespace d1090dataLib.d1090fa_dblib
     }
 
     /// <summary>
-    /// Reads all data from the given folder
+    /// Reads all data from the given file
     /// </summary>
-    /// <param name="tsvFile">A fully qualified path to where the db files are located</param>
-    /// <returns>Result as string or empty if ok</returns>
-    public string ReadDb( ref icaoDatabase db, string tsvFile )
+    /// <param name="db">The icaoDatabase to fill from the file</param>
+    /// <param name="tsvFile">The file to read</param>
+    /// <returns>The result string, either empty or error</returns>
+    public static string ReadDb( ref icaoDatabase db, string tsvFile )
     {
       if ( !File.Exists( tsvFile ) ) return $"File does not exist\n";
 

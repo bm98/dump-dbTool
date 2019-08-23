@@ -9,12 +9,14 @@ namespace d1090dataLib.d1090ext_rtlib
   /// </summary>
   public class rtDatabase
   {
-    private const string m_PREFIX = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private const string m_PREFIX = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Valid Hex string Name prefixes
+    // number index by prefix character translation table
     private readonly byte[] m_INDEX = new byte[] {0,1,2,3,4,5,6,7,8,9, // 0..9
                                                   0,0,0,0,0,0,0,
                                                   10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35}; // A..Z
     private int dbIndex( char dbPrefix ) { return m_INDEX[dbPrefix - m_PREFIX[0]]; }
 
+    // Array of route subtables (prefixed)
     private rtTable[] m_db = null;
 
     /// <summary>
@@ -31,7 +33,7 @@ namespace d1090dataLib.d1090ext_rtlib
     /// <summary>
     /// Add one record to the table
     /// </summary>
-    /// <param name="rec"></param>
+    /// <param name="rec">Record to add</param>
     public string Add( rtRec rec )
     {
       if ( rec != null ) {
@@ -43,6 +45,9 @@ namespace d1090dataLib.d1090ext_rtlib
       return "";
     }
 
+    /// <summary>
+    /// Returns the number of records in the database
+    /// </summary>
     public int Count
     {
       get {
@@ -72,7 +77,7 @@ namespace d1090dataLib.d1090ext_rtlib
     /// </summary>
     /// <param name="icaoPrefix">The leading part of the ICAO key</param>
     /// <returns>The number of entries</returns>
-    public int GetSubtableEntries( string icaoPrefix )
+    public int GetSubtableCount( string icaoPrefix )
     {
       if ( string.IsNullOrEmpty( icaoPrefix ) ) return 0;
       char dbPrefix = icaoPrefix[0];

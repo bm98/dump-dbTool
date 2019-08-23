@@ -52,7 +52,7 @@ namespace dump1090_dbTool
 
     // OUTPUT names
     private const string outputDirName = "output";
-    private const string faDbDirName = "db";  // the FA compatible DB path
+    private const string faDbDirName = "db";  // the FA compatible DB path (also used as input path)
     private static string actDbDirName = Path.Combine( faDbDirName, "aircraft_types" );  // the FA compatible DB path
     private const string actypesFile = "icao_aircraft_types.json";
 
@@ -90,11 +90,12 @@ namespace dump1090_dbTool
     private static icaoActDatabase ACTDB = new icaoActDatabase( );
 
     // Job eval result (if true we can do it)
-    private static bool jobAircrafts = false;     // create AC data
-    private static bool jobAircraftsBS = false;   // read basestation
-    private static bool jobAircraftsAddon = false;// read addon
-    private static bool jobAircraftsFA = false;   // create FA JSON DB
-    private static bool jobAircraftTypes = false; // create FA aircraft types JSON DB
+    private static bool jobAircrafts = false;       // create AC data
+    private static bool jobAircraftsBS = false;     // read basestation
+    private static bool jobAircraftsAddon = false;  // read addon
+    private static bool jobAircraftsFAout = false;  // create FA JSON DB
+    private static bool jobAircraftsFAin = false;   // read FA JSON DB
+    private static bool jobAircraftTypes = false;   // create FA aircraft types JSON DB
     private static bool jobFlights = false;
     private static bool jobNavs = false;
     private static bool jobAirports = false;
@@ -159,7 +160,7 @@ namespace dump1090_dbTool
           // brute force.. either it works - or not...
           string buffer = sr.ReadLine( ); // header line
           buffer = sr.ReadLine( ); // there is only one data line relevant..
-          string[] e = buffer.Split( new char[] { ',',';' } ); // comma or semi separated..
+          string[] e = buffer.Split( new char[] { ',', ';' } ); // comma or semi separated..
           ogLat = double.Parse( e[0] );
           ogLon = double.Parse( e[1] );
           ogRad = double.Parse( e[2] );
@@ -171,13 +172,22 @@ namespace dump1090_dbTool
       return ok;
     }
 
-    // Collect Aircraft data from BaseStation.sqb
+    // Collect Aircraft data from various sources
     // Write into web aircraft database
     private static void DoAircraftJob()
     {
       if ( !jobAircrafts ) return;
       Console.WriteLine( $"\nCreating aircraft database .." );
 
+      // read FA db
+      if ( jobAircraftsFAin ) {
+        string folder = Path.Combine( inputDir, faDbDirName );
+        Console.WriteLine( $"Reading FA Json database folder file: {folder}" );
+        Console.WriteLine( icaoDbReader.ReadDb( ref IDB, folder ) );
+        Console.WriteLine( $"DONE - ICAO ModeS Database contains {IDB.Count} records\n" );
+      }
+
+      // read BaseStation.sqb
       if ( jobAircraftsBS ) {
         string file = Path.Combine( inputDir, basestationFile );
         var ir = new BaseStation( );
@@ -191,12 +201,12 @@ namespace dump1090_dbTool
         }
       }
 
+      // read manual additions
       if ( jobAircraftsAddon ) {
         string file = Path.Combine( inputDir, icaoAddFile );
-        var ir = new icaoCsvReader( );
         Console.WriteLine( $"Reading ICAO Aircraft Addon CSV file: {file}" );
-        Console.WriteLine( ir.ReadDb( ref IDB, file ) );
-        Console.WriteLine( $"DONE - ICAO ModeS Database Database contains now {IDB.Count} records\n" );
+        Console.WriteLine( icaoCsvReader.ReadDb( ref IDB, file ) );
+        Console.WriteLine( $"DONE - ICAO ModeS Database Database contains {IDB.Count} records\n" );
       }
 
       // Create now
@@ -215,7 +225,7 @@ namespace dump1090_dbTool
     // Write into web aircraft dump1090fa compatible JSON database
     private static void DoAircraftFAJob()
     {
-      if ( !jobAircraftsFA ) return;
+      if ( !jobAircraftsFAout ) return;
       Console.WriteLine( $"\nCreating dump1090fa compatible aircraft database .." );
 
       if ( IDB.Count <= 0 ) {
@@ -229,8 +239,7 @@ namespace dump1090_dbTool
       string folder = Path.Combine( outputDir, faDbDirName );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
-      var iw = new icaoDbWriter( );
-      iw.WriteDb( IDB, folder );
+      icaoDbWriter.WriteDb( IDB, folder );
       Console.WriteLine( $"JsonDB ModeS written" );
     }
 
@@ -243,9 +252,8 @@ namespace dump1090_dbTool
       Console.WriteLine( $"\nCreating dump1090fa compatible aircraft types database .." );
 
       string file = Path.Combine( inputDir, actFile );
-      var ir = new icaoActReader( );
       Console.WriteLine( $"Reading ICAO Aircraft Types json file: {file}" );
-      Console.WriteLine( ir.ReadDb( ref ACTDB, file ) );
+      Console.WriteLine( icaoActReader.ReadDb( ref ACTDB, file ) );
       Console.WriteLine( $"DONE - ICAO Aircraft Types Database contains {ACTDB.Count} records\n" );
       // Create now
       if ( ACTDB.Count <= 0 ) {
@@ -255,8 +263,7 @@ namespace dump1090_dbTool
       string folder = Path.Combine( outputDir, actDbDirName );
       if ( !Directory.Exists( folder ) )
         Directory.CreateDirectory( folder );
-      var iw = new icaoActDbWriter( );
-      iw.WriteDb( ACTDB, Path.Combine( folder, actypesFile ) );
+      icaoActDbWriter.WriteDb( ACTDB, Path.Combine( folder, actypesFile ) );
       Console.WriteLine( $"JsonDB Aircraft Types written" );
     }
 
@@ -269,13 +276,12 @@ namespace dump1090_dbTool
       string file = Path.Combine( inputDir, airportsFile );
       var ir = new apCsvReader( );
       Console.WriteLine( $"Reading Airport CSV: {file}" );
-      Console.WriteLine( ir.ReadDb( ref APDB, file ) );
+      Console.WriteLine( apCsvReader.ReadDb( APDB, file ) );
       Console.WriteLine( $"DONE - Airports Database contains {APDB.Count} records\n" );
 
       file = Path.Combine( inputDir, routesFile );
-      var tr = new rtTsvReader( );
       Console.WriteLine( $"Reading Route TSV: {file}" );
-      Console.WriteLine( tr.ReadDb( ref RTDB, file ) );
+      Console.WriteLine( rtTsvReader.ReadDb( ref RTDB, file ) );
       Console.WriteLine( $"DONE - Route Database contains {RTDB.Count} records\n" );
 
       // Create now
@@ -302,21 +308,19 @@ namespace dump1090_dbTool
       Console.WriteLine( $"\nCreating nav locations .." );
 
       string file = Path.Combine( inputDir, navaidsFile );
-      var ir = new navLib.navCsvReader( );
       Console.WriteLine( $"Reading Navaid CSV: {file}" );
-      Console.WriteLine( ir.ReadDb( ref NAVDB, file ) );
+      Console.WriteLine( navLib.navCsvReader.ReadDb( ref NAVDB, file ) );
       Console.WriteLine( $"DONE - Navaids Database contains {NAVDB.Count} records\n" );
       // Create now
-      var iw = new navLib.navGeoWriter( );
       // limit by range and also by type
       // making two sets here, one for NDBs and one for all others
       using ( var outS = File.Create( Path.Combine( outputDir, geoNdbFile ) ) ) {
-        iw.WriteGeoJson( NAVDB, outS, ogRad, ogLat, ogLon,
+        navLib.navGeoWriter.WriteGeoJson( NAVDB, outS, ogRad, ogLat, ogLon,
         new navLib.navRec.NavTypes[] { navLib.navRec.NavTypes.NDB, navLib.navRec.NavTypes.NDB_DME } );
         Console.WriteLine( $"{geoNdbFile} written" );
       }
       using ( var outS = File.Create( Path.Combine( outputDir, geoVorDmeFile ) ) ) {
-        iw.WriteGeoJson( NAVDB, outS, ogRad, ogLat, ogLon,
+        navLib.navGeoWriter.WriteGeoJson( NAVDB, outS, ogRad, ogLat, ogLon,
         new navLib.navRec.NavTypes[] { navLib.navRec.NavTypes.DME, navLib.navRec.NavTypes.TACAN,
                                                 navLib.navRec.NavTypes.VOR, navLib.navRec.NavTypes.VORTAC,
                                                 navLib.navRec.NavTypes.VOR_DME, navLib.navRec.NavTypes.Other } );
@@ -331,22 +335,20 @@ namespace dump1090_dbTool
 
       if ( APDB.Count <= 0 ) {
         string file = Path.Combine( inputDir, airportsFile );
-        var ir = new apCsvReader( );
         Console.WriteLine( $"Reading Airport CSV: {file}" );
-        Console.WriteLine( ir.ReadDb( ref APDB, file ) );
+        Console.WriteLine( apCsvReader.ReadDb( APDB, file ) );
         Console.WriteLine( $"DONE - Airports Database contains {APDB.Count} records\n" );
       }
       // Create now
-      var iw = new apGeoWriter( );
       // limit by range and also by type
       // making two sets here, one for mid-large Apts and one for all others
       using ( var outS = File.Create( Path.Combine( outputDir, geoAptMainFile ) ) ) {
-        iw.WriteGeoJson( APDB, outS, ogRad, ogLat, ogLon,
+        apGeoWriter.WriteGeoJson( APDB, outS, ogRad, ogLat, ogLon,
         new apRec.AptTypes[] { apRec.AptTypes.medium_airport, apRec.AptTypes.large_airport } );
         Console.WriteLine( $"{geoAptMainFile} written" );
       }
       using ( var outS = File.Create( Path.Combine( outputDir, geoAptOtherFile ) ) ) {
-        iw.WriteGeoJson( APDB, outS, ogRad, ogLat, ogLon,
+        apGeoWriter.WriteGeoJson( APDB, outS, ogRad, ogLat, ogLon,
         new apRec.AptTypes[] { apRec.AptTypes.balloonport, apRec.AptTypes.closed, apRec.AptTypes.heliport,
                                  apRec.AptTypes.seaplane_base, apRec.AptTypes.small_airport, apRec.AptTypes.Other } );
         Console.WriteLine( $"{geoAptOtherFile} written" );
@@ -359,21 +361,18 @@ namespace dump1090_dbTool
       Console.WriteLine( $"\nCreating airway layouts .." );
 
       string file = Path.Combine( inputDir, xNavsFile );
-      var ir = new navReader( );
       Console.WriteLine( $"Reading XP11 Nav DAT: {file}" );
-      Console.WriteLine( ir.ReadDb( ref XNAVDB, file ) );
+      Console.WriteLine( navReader.ReadDb( ref XNAVDB, file ) );
       Console.WriteLine( $"DONE - X Nav Database contains {XNAVDB.Count} record\ns" );
 
       file = Path.Combine( inputDir, xFixesFile );
-      var fr = new fixReader( );
       Console.WriteLine( $"Reading XP11 Fix DAT: {file}" );
-      Console.WriteLine( fr.ReadDb( ref XNAVDB, file ) );
+      Console.WriteLine( fixReader.ReadDb( ref XNAVDB, file ) );
       Console.WriteLine( $"DONE - X Nav Database contains now {XNAVDB.Count} records\n" );
 
       file = Path.Combine( inputDir, xAirwaysFile );
-      var ar = new awyReader( );
       Console.WriteLine( $"Reading XP11 Awy DAT: {file}" );
-      Console.WriteLine( ar.ReadDb( ref XAWYDB, file ) );
+      Console.WriteLine( awyReader.ReadDb( ref XAWYDB, file ) );
       Console.WriteLine( $"DONE - X Airways Database contains {XAWYDB.Count} records\n" );
       // Create now
       Console.WriteLine( $"\nStarting to calculate and create airway files (this may take some minutes....)" );
@@ -442,16 +441,12 @@ namespace dump1090_dbTool
       inputDir = Path.Combine( buildDir, inputDirName );
 
       // create dump1090fa-aircrafts.sqb
-      //  - needs input\BaseStation.sqb and/or ICAO-AircraftAddon.csv (our own addons)
-      jobAircraftsAddon = File.Exists( Path.Combine( inputDir, icaoAddFile ));
+      //  - needs input\BaseStation.sqb and/or (FA input db if -fa) and/or ICAO-AircraftAddon.csv (our own addons)
+      jobAircraftsAddon = File.Exists( Path.Combine( inputDir, icaoAddFile ) );
       jobAircraftsBS = File.Exists( Path.Combine( inputDir, basestationFile ) );
-      jobAircrafts = jobAircraftsBS || jobAircraftsAddon;
-      jobAircraftsFA = jobAircrafts && argFAdb; // must create FA db if we can to aircrafts only
-
-      // create dump1090fa-aircrafts.sqb
-      //  - needs input\BaseStation.sqb
-      jobAircrafts = File.Exists( Path.Combine( inputDir, basestationFile ) );
-      jobAircraftsFA = jobAircrafts && argFAdb; // must create FA db
+      jobAircraftsFAin = Directory.Exists( Path.Combine( inputDir, faDbDirName ) );
+      jobAircrafts = argFAdb && jobAircraftsBS || jobAircraftsFAin || jobAircraftsAddon;
+      jobAircraftsFAout = jobAircrafts && argFAdb; // must create FA db if we can to aircrafts only
 
       // create icao_aircraft_types.json
       //  - needs input\ICAO-AircraftTypes.json

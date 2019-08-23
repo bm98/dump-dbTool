@@ -50,7 +50,7 @@ namespace d1090dataLib.xp11_awylib
             if ( awRec.Value.layer == layer ) {
               // expected layer (hi or lo)
               if ( rec.Key == awRec.Value.startID ) {
-                var endNav = ndb.GetSubtable( )[awRec.Value.endID];
+                var endNav = ndb.GetTable( )[awRec.Value.endID];
                 if ( !m_trackedMarkers.Contains( rec.Value.ident ) ) {
                   m_trackedMarkers.Add( rec.Value.ident );
                 }
@@ -61,7 +61,7 @@ namespace d1090dataLib.xp11_awylib
                 doComma = true; // after the first line prepend records with comma
               }
               else if ( rec.Key == awRec.Value.endID ) {
-                var startNav = ndb.GetSubtable( )[awRec.Value.endID];
+                var startNav = ndb.GetTable( )[awRec.Value.endID];
                 if ( !m_trackedMarkers.Contains( startNav.ident ) ) {
                   m_trackedMarkers.Add( startNav.ident );
                 }
@@ -108,7 +108,7 @@ namespace d1090dataLib.xp11_awylib
         sw.WriteLine( head );
         // Navs and Fixes in tracked
         foreach ( var rec in m_trackedMarkers ) {
-          var nav = ndb.GetSubtable( )[rec];
+          var nav = ndb.GetTable( )[rec];
           // expected layer (hi or lo)
           sw.WriteLine( ( doComma ? "," : "" ) + nav.AsGeoJson( ) );
           doComma = true; // after the first line prepend records with comma

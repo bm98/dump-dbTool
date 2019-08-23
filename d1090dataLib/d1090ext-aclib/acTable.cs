@@ -6,7 +6,8 @@ using System.Text;
 namespace d1090dataLib.d1090ext_aclib
 {
   /// <summary>
-  /// contains all icao aircraft records
+  /// Database table containing all icao aircraft records
+  /// Handles the FA db with ModeS prefix for their Json file database
   /// </summary>
   public class acTable : SortedDictionary<string, acRec>
   {
@@ -85,6 +86,10 @@ namespace d1090dataLib.d1090ext_aclib
       return ret;
     }
 
+    /// <summary>
+    /// Adds a table to this table (omitting key dupes)
+    /// </summary>
+    /// <param name="selection">Enumerated Key Value pairs to add to this table</param>
     private string AddSubtable( IEnumerable<KeyValuePair<string, acRec>> selection )
     {
       string ret = "";
@@ -118,7 +123,7 @@ namespace d1090dataLib.d1090ext_aclib
     /// </summary>
     /// <param name="icaoPrefix">The leading part of the ICAO key</param>
     /// <returns>The number of entries</returns>
-    public int GetSubtableEntries( string icaoPrefix )
+    public int GetSubtableCount( string icaoPrefix )
     {
       if ( string.IsNullOrEmpty( icaoPrefix ) ) return 0;
       string dbPrefix = icaoPrefix[0].ToString( );

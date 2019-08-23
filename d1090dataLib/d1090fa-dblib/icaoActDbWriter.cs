@@ -15,7 +15,12 @@ namespace d1090dataLib.d1090fa_dblib
   public class icaoActDbWriter
   {
 
-    private void WriteFile( string dbFile, icaoActTable subTable)
+    /// <summary>
+    /// Writes one file from the given sub table
+    /// </summary>
+    /// <param name="dbFile">The file to write to</param>
+    /// <param name="subTable">The subtable to write out</param>
+    private static void WriteFile( string dbFile, icaoActTable subTable)
     {
       string fName = dbFile;
       using ( var sw = new StreamWriter( fName ) ) {
@@ -31,7 +36,7 @@ namespace d1090dataLib.d1090fa_dblib
     }
 
     // writes the README file
-    private void WriteReadme(string folder )
+    private static void WriteReadme(string folder )
     {
       string fName = Path.Combine( folder, "README" );
       using ( var sw = new StreamWriter( fName ) ) {
@@ -46,7 +51,7 @@ namespace d1090dataLib.d1090fa_dblib
     /// <param name="db">The ACT database</param>
     /// <param name="dbFile">Absolute path to the db file to write</param>
     /// <returns>True if OK</returns>
-    public bool WriteDb( icaoActDatabase db, string dbFile )
+    public static bool WriteDb( icaoActDatabase db, string dbFile )
     {
       string dbFolder = Path.GetDirectoryName( dbFile );
       if ( !Directory.Exists( dbFolder ) ) Directory.CreateDirectory( dbFolder );

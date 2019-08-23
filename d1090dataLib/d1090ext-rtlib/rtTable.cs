@@ -78,6 +78,10 @@ namespace d1090dataLib.d1090ext_rtlib
       return ret;
     }
 
+    /// <summary>
+    /// Adds a table to this table (omitting key dupes)
+    /// </summary>
+    /// <param name="selection">Enumerated Key Value pairs to add to this table</param>
     private string AddSubtable( IEnumerable<KeyValuePair<string, rtRec>> selection )
     {
       string ret = "";

@@ -5,6 +5,9 @@ using static d1090dataLib.xp11_navlib.navRec;
 
 namespace d1090dataLib.xp11_navlib
 {
+  /// <summary>
+  /// Maintains the XPlane Nav Items database
+  /// </summary>
   public class navDatabase
   {
 
@@ -30,6 +33,9 @@ namespace d1090dataLib.xp11_navlib
       return "";
     }
 
+    /// <summary>
+    /// Returns the number of records in the database
+    /// </summary>
     public int Count
     {
       get {
@@ -40,13 +46,20 @@ namespace d1090dataLib.xp11_navlib
     /// <summary>
     /// Return the complete table
     /// </summary>
-    /// <returns></returns>
-    public navTable GetSubtable()
+    /// <returns>The complete table</returns>
+    public navTable GetTable()
     {
       return m_db;
     }
 
-
+    /// <summary>
+    /// Returns a subtable with items that match the given criteria
+    /// </summary>
+    /// <param name="rangeLimitNm">Range Limit in nm</param>
+    /// <param name="Lat">Center Lat (decimal)</param>
+    /// <param name="Lon">Center Lon (decimal)</param>
+    /// <param name="navTypes">Type of nav items to include</param>
+    /// <returns>A table with selected records</returns>
     public navTable GetSubtable( double rangeLimitNm, double Lat, double Lon, NavTypes[] navTypes = null )
     {
       return m_db.GetSubtable( rangeLimitNm, Lat, Lon, navTypes );

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace d1090dataLib.xp11_awylib
 {
+  /// <summary>
+  /// Reader for XPlane 11 earth_awy.dat file
+  /// </summary>
   public class awyReader
   {
     /// <summary>
@@ -50,17 +53,17 @@ namespace d1090dataLib.xp11_awylib
       if ( e.Length > 10 )
         name = e[10].Trim( new char[] { ' ', '"' } );
 
-
       return new awyRec( start_icao_id, start_icao_region, start_navaid, end_icao_id, end_icao_region, end_navaid, restriction, layer, baselevel, toplevel, name );
 
     }
 
     /// <summary>
-    /// Reads one db file
+    /// Reads one file to fill the db
     /// </summary>
+    /// <param name="db">The awyDatabase to fill</param>
     /// <param name="fName">The qualified filename</param>
-    /// <returns>A table or null</returns>
-    private string ReadDbFile( ref awyDatabase db, string fName )
+    /// <returns>The result string, either empty or error</returns>
+    private static string ReadDbFile( ref awyDatabase db, string fName )
     {
       var icaoPre = Path.GetFileNameWithoutExtension( fName );
       string ret = "";
@@ -82,11 +85,12 @@ namespace d1090dataLib.xp11_awylib
     }
 
     /// <summary>
-    /// Reads all data from the given folder
+    /// Reads the XPlane 11 earth_awy.dat file and populates the supplied database
     /// </summary>
-    /// <param name="tsvFile">A fully qualified path to where the db files are located</param>
-    /// <returns>A populated table or null</returns>
-    public string ReadDb( ref awyDatabase db, string fName )
+    /// <param name="db">The awyDatabase to fill</param>
+    /// <param name="fName">The file to read</param>
+    /// <returns>The result string, either empty or error</returns>
+    public static string ReadDb( ref awyDatabase db, string fName )
     {
       if ( !File.Exists( fName ) ) return $"File does not exist\n";
 

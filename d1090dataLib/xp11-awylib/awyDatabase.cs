@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace d1090dataLib.xp11_awylib
 {
+  /// <summary>
+  /// Maintains the XPlane Airway Items database
+  /// </summary>
   public class awyDatabase
   {
 
@@ -21,7 +24,7 @@ namespace d1090dataLib.xp11_awylib
     /// <summary>
     /// Add one record to the table
     /// </summary>
-    /// <param name="rec"></param>
+    /// <param name="rec">The awyRec to add</param>
     public string Add( awyRec rec )
     {
       if ( rec != null ) {
@@ -30,6 +33,9 @@ namespace d1090dataLib.xp11_awylib
       return "";
     }
 
+    /// <summary>
+    /// Returns the number of records in the database
+    /// </summary>
     public int Count
     {
       get {
@@ -41,16 +47,26 @@ namespace d1090dataLib.xp11_awylib
     /// Return the complete table
     /// </summary>
     /// <returns></returns>
-    public awyTable GetSubtable()
+    public awyTable GetTable()
     {
       return m_db;
     }
 
+    /// <summary>
+    /// Return an Airway subtable where either start or end ICAO designator matches
+    /// </summary>
+    /// <param name="icao_key">The ICAO start or end name of airways to select</param>
+    /// <returns>A table with selected records</returns>
     public awyTable GetSubtable( string icao_key )
     {
       return m_db.GetSubtable( icao_key );
     }
 
+    /// <summary>
+    /// Return an Airway subtable where either start or end ICAO designator matches
+    /// </summary>
+    /// <param name="icao_key">The ICAO start or end name of airways to select</param>
+    /// <returns>A sorted table with selected records</returns>
     public awyTable GetSortedSubtable( string icao_key )
     {
       return m_db.GetSortedSubtable( icao_key );

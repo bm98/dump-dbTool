@@ -10,12 +10,10 @@ namespace d1090dataLib.d1090fa_dblib
 {
   internal class JsonRecord : SortedList<string, JsonContent>
   {
-
   }
 
   internal class JsonContent : SortedList<string, string>
   {
-
   }
 
   /// <summary>

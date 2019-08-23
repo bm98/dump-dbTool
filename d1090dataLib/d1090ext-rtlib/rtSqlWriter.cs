@@ -7,11 +7,18 @@ namespace d1090dataLib.d1090ext_rtlib
 {
   /// <summary>
   /// Creates SQLite Insert Statements
+  /// Assumes the db contains a table 'routes (flight_code, from_apt_icao, to_apt_icao)'
   /// </summary>
   public class rtSqlWriter
   {
     private const string PREFIXES = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    /// <summary>
+    /// Exec INSERT statements for an airport subtable
+    /// </summary>
+    /// <param name="sqConnection">The db connection</param>
+    /// <param name="subTable">The subtable to dump</param>
+    /// <returns>The result string, either empty or error</returns>
     private static string WriteFile( SQLiteConnection sqConnection, rtTable subTable )
     {
       using ( SQLiteCommand sqlite_cmd = sqConnection.CreateCommand( ) ) {
@@ -30,10 +37,11 @@ namespace d1090dataLib.d1090ext_rtlib
     }
 
     /// <summary>
-    /// Write complete db as INSERT statements
+    /// Write complete route db into the supplied database as one transaction
     /// </summary>
-    /// <param name="db">The airport db</param>
-    /// <returns>String as result either empty or error</returns>
+    /// <param name="db">The route db to dump</param>
+    /// <param name="sqConnection">The db connection</param>
+    /// <returns>The result string, either empty or error</returns>
     public static string WriteSqDB( rtDatabase db, SQLiteConnection sqConnection )
     {
       string ret = "";

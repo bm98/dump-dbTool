@@ -5,6 +5,9 @@ using System.Text;
 
 namespace d1090dataLib.d1090ext_rtlib
 {
+  /// <summary>
+  /// Route Database writer (may never be used...)
+  /// </summary>
   public class rtDbWriter
   {
     const int NREC = 2500;
@@ -18,7 +21,7 @@ namespace d1090dataLib.d1090ext_rtlib
     /// <param name="table">The table containing the prefixed records</param>
     /// <param name="prefix">The prefix limiting the choice</param>
     /// <returns></returns>
-    private void DecomposeTable( string dbFolder, rtTable table )
+    private static void DecomposeTable( string dbFolder, rtTable table )
     {
       int cnt = table.Count; // how many with that prefix
       if ( cnt <= NREC ) {
@@ -67,7 +70,13 @@ namespace d1090dataLib.d1090ext_rtlib
     }
 
 
-    private void WriteFile( string dbFolder, rtTable subTable, string extension )
+    /// <summary>
+    /// Writes one file from the given sub table
+    /// </summary>
+    /// <param name="dbFolder">The folder to write to</param>
+    /// <param name="subTable">The subtable to write out</param>
+    /// <param name="extension">The extension string to add for the FA record keeping</param>
+    private static void WriteFile( string dbFolder, rtTable subTable, string extension )
     {
       string fName = Path.Combine( dbFolder, subTable.DbPrefix + ".json" );
       using ( var sw = new StreamWriter( fName ) ) {
@@ -86,7 +95,13 @@ namespace d1090dataLib.d1090ext_rtlib
     }
 
 
-    public bool WriteDb( rtDatabase db, string dbFolder )
+    /// <summary>
+    /// Write the route db as FA formatted Json files into the given folder
+    /// </summary>
+    /// <param name="db">The database to dump</param>
+    /// <param name="dbFolder">The folder to write to</param>
+    /// <returns>True for success</returns>
+    public static bool WriteDb( rtDatabase db, string dbFolder )
     {
       if ( !Directory.Exists( dbFolder ) ) return false;
 

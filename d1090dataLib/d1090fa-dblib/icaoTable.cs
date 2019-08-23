@@ -8,14 +8,12 @@ using d1090dataLib.d1090ext_aclib;
 namespace d1090dataLib.d1090fa_dblib
 {
   /// <summary>
-  /// contains all icao records
+  /// contains all icao (ModeS) records
   /// </summary>
   public class icaoTable : SortedDictionary<string, icaoRec>
   {
     private string m_prefix = "X";
     public string DbPrefix { get => m_prefix; set => m_prefix = value; }
-
-
 
 
     /// <summary>
@@ -26,7 +24,6 @@ namespace d1090dataLib.d1090fa_dblib
     {
       m_prefix = prefix;
     }
-
 
     /// <summary>
     /// Create an ICAO table from the given table
@@ -39,30 +36,27 @@ namespace d1090dataLib.d1090fa_dblib
       this.AddSubtable( table );
     }
 
-
     /// <summary>
     /// Add one record to the table
+    /// For existing records overwrite if data is provided (reg and type is expected to be delivered anyway)
     /// </summary>
-    /// <param name="rec"></param>
+    /// <param name="rec">The record to be added/updated</param>
     public string Add( icaoRec rec )
     {
       string ret = "";
       if ( rec != null ) {
+        // sanity.. modeS ID must be 6 chars
         if ( rec.icao.Length == 6 ) {
           if ( !this.ContainsKey( rec.icao ) ) {
             this.Add( rec.icao, rec );
           }
           else {
-            /*
-              if ( this[rec.icao].regName != rec.regName )
-                ret += $"reg: old:{this[rec.icao].regName}, new: {rec.regName},";
-              if ( this[rec.icao].airctype != rec.airctype )
-                ret += $"airc: old:{this[rec.icao].airctype}, new: {rec.airctype},";
-              if ( !string.IsNullOrEmpty( ret ) )
-                ret = $"existing:{this[rec.icao].icao}," + ret + $"\n";
-            */
+            // For existing records overwrite if data is provided (reg and type is expected to be delivered anyway)
             this[rec.icao].registration = rec.registration;
             this[rec.icao].airctype = rec.airctype;
+            this[rec.icao].manufacturer = string.IsNullOrEmpty( rec.manufacturer ) ? this[rec.icao].manufacturer : rec.manufacturer;
+            this[rec.icao].airctypedesc = string.IsNullOrEmpty( rec.airctypedesc ) ? this[rec.icao].airctypedesc : rec.airctypedesc;
+            this[rec.icao].operator_ = string.IsNullOrEmpty( rec.operator_ ) ? this[rec.icao].operator_ : rec.operator_;
           }
         }
       }
@@ -101,6 +95,10 @@ namespace d1090dataLib.d1090fa_dblib
       return ret;
     }
 
+    /// <summary>
+    /// Adds a table to this table (omitting key dupes)
+    /// </summary>
+    /// <param name="selection">Enumerated Key Value pairs to add to this table</param>
     private string AddSubtable( IEnumerable<KeyValuePair<string, icaoRec>> selection )
     {
       string ret = "";
@@ -134,7 +132,7 @@ namespace d1090dataLib.d1090fa_dblib
     /// </summary>
     /// <param name="icaoPrefix">The leading part of the ICAO key</param>
     /// <returns>The number of entries</returns>
-    public int GetSubtableEntries( string icaoPrefix )
+    public int GetSubtableCount( string icaoPrefix )
     {
       if ( string.IsNullOrEmpty( icaoPrefix ) ) return 0;
       string dbPrefix = icaoPrefix[0].ToString( );

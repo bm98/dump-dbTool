@@ -6,11 +6,19 @@ using System.Text;
 namespace d1090dataLib.d1090ext_aplib
 {
   /// <summary>
-  /// Creates SQLite Insert Statements
+  /// Creates SQLite Insert Statements for Airport records
+  /// Assumes the db contains a table 'airports (apt_icao_code, apt_iata_code, iso_country, iso_region, lat, lon, elevation, apt_type, apt_name)'
+  /// 
   /// </summary>
   public class apSqlWriter
   {
 
+    /// <summary>
+    /// Exec INSERT statements for an airport subtable
+    /// </summary>
+    /// <param name="sqConnection">The db connection</param>
+    /// <param name="subTable">The subtable to dump</param>
+    /// <returns>The result string, either empty or error</returns>
     private static string WriteFile( SQLiteConnection sqConnection, apTable subTable )
     {
       using ( SQLiteCommand sqlite_cmd = sqConnection.CreateCommand( ) ) {
@@ -32,10 +40,11 @@ namespace d1090dataLib.d1090ext_aplib
 
 
     /// <summary>
-    /// Write complete db as INSERT statements
+    /// Write complete airport db into the supplied database as one transaction
     /// </summary>
-    /// <param name="db">The airport db</param>
-    /// <returns>String as result either empty or error</returns>
+    /// <param name="db">The airport db to dump</param>
+    /// <param name="sqConnection">The db connection</param>
+    /// <returns>The result string, either empty or error</returns>
     public static string WriteSqDB( apDatabase db, SQLiteConnection sqConnection )
     {
       string ret = "";
@@ -43,7 +52,7 @@ namespace d1090dataLib.d1090ext_aplib
         sqlite_cmd.CommandText = "BEGIN TRANSACTION;";
         sqlite_cmd.ExecuteNonQuery( );
         try {
-          ret = WriteFile( sqConnection, db.GetSubtable( ) );
+          ret = WriteFile( sqConnection, db.GetTable( ) );
           sqlite_cmd.CommandText = "COMMIT;";
           sqlite_cmd.ExecuteNonQuery( );
         }

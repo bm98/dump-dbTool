@@ -64,6 +64,10 @@ namespace d1090dataLib.xp11_awylib
     }
 
 
+    /// <summary>
+    /// Adds a table to this table (omitting key dupes)
+    /// </summary>
+    /// <param name="selection">Enumerated Key Value pairs to add to this table</param>
     private string AddSubtable( IEnumerable<KeyValuePair<string, awyRec>> selection )
     {
       string ret = "";
@@ -94,7 +98,7 @@ namespace d1090dataLib.xp11_awylib
     }
 
     /// <summary>
-    /// Return an Airway subtable where either start or end ICAO designator matches
+    /// Return a sorted Airway subtable where either start or end ICAO designator matches
     /// </summary>
     /// <param name="icao_key">The icao to match</param>
     /// <returns>A sorted awyTable</returns>

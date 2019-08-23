@@ -11,7 +11,12 @@ namespace d1090dataLib.d1090ext_navlib
   /// </summary>
   public class navGeoWriter
   {
-    private void WriteFile( StreamWriter sw, navTable subTable )
+    /// <summary>
+    /// Write one geojson file from the supplied table
+    /// </summary>
+    /// <param name="sw">An open streamwriter</param>
+    /// <param name="subTable">The apTable to write out</param>
+    private static void WriteFile( StreamWriter sw, navTable subTable )
     {
       int i = 1; // have to count to avoid the last comma ??!!
       foreach ( var rec in subTable ) {
@@ -20,12 +25,17 @@ namespace d1090dataLib.d1090ext_navlib
     }
 
     /// <summary>
-    /// Writes a GeoJson from the database
+    /// Writes a geojson file from the given database into the open stream
+    /// Selects items to write from the given selection criteria
     /// </summary>
-    /// <param name="db">The database</param>
-    /// <param name="geojFile">the filename to write to</param>
+    /// <param name="db">The navDatabase to dump</param>
+    /// <param name="geojOutStream">The open outstream</param>
+    /// <param name="rangeLimitNm">Range Limit in nm</param>
+    /// <param name="Lat">Center Lat (decimal)</param>
+    /// <param name="Lon">Center Lon (decimal)</param>
+    /// <param name="navTypes">Type of nav items to include</param>
     /// <returns>True ??!!</returns>
-    public bool WriteGeoJson( navDatabase db, Stream geojOutStream,
+    public static bool WriteGeoJson( navDatabase db, Stream geojOutStream,
                                 double rangeLimitNm = -1.0, double Lat = 0, double Lon = 0, NavTypes[] navTypes = null )
     {
       /*

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace d1090dataLib.d1090ext_rtlib
 {
+  /// <summary>
+  /// Route TSV file reader
+  /// </summary>
   public class rtTsvReader
   {
 
@@ -14,7 +17,7 @@ namespace d1090dataLib.d1090ext_rtlib
     /// Translates from native to generic record format
     /// </summary>
     /// <param name="native"></param>
-    /// <returns></returns>
+    /// <returns>A new rtRec</returns>
     private static rtRec FromNative( string native )
     {
       // should be the TSV variant
@@ -46,9 +49,10 @@ namespace d1090dataLib.d1090ext_rtlib
     /// <summary>
     /// Reads one db file
     /// </summary>
+    /// <param name="db">The rtDatabase to fill from the file</param>
     /// <param name="fName">The qualified filename</param>
-    /// <returns>A table or null</returns>
-    private string ReadDbFile( ref rtDatabase db, string fName )
+    /// <returns>The result string, either empty or error</returns>
+    private static string ReadDbFile( ref rtDatabase db, string fName )
     {
       var icaoPre = Path.GetFileNameWithoutExtension( fName );
       string ret = "";
@@ -70,11 +74,12 @@ namespace d1090dataLib.d1090ext_rtlib
     }
 
     /// <summary>
-    /// Reads all data from the given folder
+    /// Reads all data from the given file
     /// </summary>
-    /// <param name="tsvFile">A fully qualified path to where the db files are located</param>
-    /// <returns>A populated table or null</returns>
-    public string ReadDb( ref rtDatabase db, string tsvFile )
+    /// <param name="db">The rtDatabase to fill from the file</param>
+    /// <param name="tsvFile">The file to read</param>
+    /// <returns>The result string, either empty or error</returns>
+    public static string ReadDb( ref rtDatabase db, string tsvFile )
     {
       if ( !File.Exists( tsvFile ) ) return $"File does not exist\n";
 

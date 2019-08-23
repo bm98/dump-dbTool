@@ -45,7 +45,7 @@ namespace d1090dataLib.xp11_navlib
           WriteFile( sw, db.GetSubtable( rangeLimitNm, Lat, Lon, navTypes ) );
         }
         else {
-          WriteFile( sw, db.GetSubtable( ) );
+          WriteFile( sw, db.GetTable( ) );
         }
         sw.WriteLine( foot );
       }

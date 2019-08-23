@@ -11,7 +11,12 @@ namespace d1090dataLib.d1090ext_aplib
   /// </summary>
   public class apGeoWriter
   {
-    private void WriteFile( StreamWriter sw, apTable subTable )
+    /// <summary>
+    /// Write one geojson file from the supplied table
+    /// </summary>
+    /// <param name="sw">An open streamwriter</param>
+    /// <param name="subTable">The apTable to write out</param>
+    private static void WriteFile( StreamWriter sw, apTable subTable )
     {
       int i = 1; // have to count to avoid the last comma ??!!
       foreach ( var rec in subTable ) {
@@ -20,13 +25,17 @@ namespace d1090dataLib.d1090ext_aplib
     }
 
     /// <summary>
-    /// Writes a GeoJson from the database
+    /// Writes a geojson file from the given database into the open stream
+    /// Selects items to write from the given selection criteria
     /// </summary>
-    /// <param name="db">The database</param>
-    /// <param name="geojFile">the filename to write to</param>
-    /// <param name="rangeLimitNm">Limits the output based on a range [Nm]</param>
+    /// <param name="db">The apDatabase to dump</param>
+    /// <param name="geojOutStream">The open outstream</param>
+    /// <param name="rangeLimitNm">Range Limit in nm</param>
+    /// <param name="Lat">Center Lat (decimal)</param>
+    /// <param name="Lon">Center Lon (decimal)</param>
+    /// <param name="navTypes">Type of nav items to include</param>
     /// <returns>True ??!!</returns>
-    public bool WriteGeoJson( apDatabase db, Stream geojOutStream,
+    public static bool WriteGeoJson( apDatabase db, Stream geojOutStream,
                                 double rangeLimitNm = -1.0, double Lat = 0, double Lon = 0, AptTypes[] aptTypes = null )
     {
       /*
@@ -49,7 +58,7 @@ namespace d1090dataLib.d1090ext_aplib
           WriteFile( sw, db.GetSubtable( rangeLimitNm, Lat, Lon, aptTypes ) );
         }
         else {
-          WriteFile( sw, db.GetSubtable( ) );
+          WriteFile( sw, db.GetTable( ) );
         }
         sw.WriteLine( foot );
       }

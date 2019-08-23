@@ -79,6 +79,10 @@ namespace d1090dataLib.d1090ext_aplib
       return ret;
     }
 
+    /// <summary>
+    /// Adds a table to this table (omitting key dupes)
+    /// </summary>
+    /// <param name="selection">Enumerated Key Value pairs to add to this table</param>
     private string AddSubtable( IEnumerable<KeyValuePair<string, apRec>> selection )
     {
       string ret = "";
@@ -92,6 +96,14 @@ namespace d1090dataLib.d1090ext_aplib
     }
 
 
+    /// <summary>
+    /// Returns a subtable with items that match the given criteria
+    /// </summary>
+    /// <param name="rangeLimitNm">Range Limit in nm</param>
+    /// <param name="Lat">Center Lat (decimal)</param>
+    /// <param name="Lon">Center Lon (decimal)</param>
+    /// <param name="aptTypes">Type of airport items to include</param>
+    /// <returns>A table with selected records</returns>
     public apTable GetSubtable( double rangeLimitNm, double Lat, double Lon, AptTypes[] aptTypes = null )
     {
       if ( aptTypes == null ) aptTypes = new AptTypes[] { AptTypes.All };

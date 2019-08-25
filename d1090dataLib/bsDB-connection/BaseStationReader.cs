@@ -10,7 +10,7 @@ namespace d1090dataLib.bsDB_connection
   /// <summary>
   /// Connector to the BaseStation sqLite database
   /// </summary>
-  public class BaseStation
+  public class BaseStationReader
   {
 
     private string m_bsFilename = "";
@@ -58,7 +58,7 @@ namespace d1090dataLib.bsDB_connection
             while ( sqlite_datareader.Read( ) ) // Read() returns true if there is still a result line to read
             {
               /*  Table aircraft:
-               *   0                1                2          3         4              5             6              7                8              9            10
+               *       0                1                2          3         4              5             6              7                8              9            10
                    "AircraftID", "FirstCreated", "LastModified", "ModeS", "ModeSCountry", "Country", "Registration", "CurrentRegDate", "PreviousID", "FirstRegDate", "Status",
                        11             12            13             14        15         16             17              18             19           20
                    "DeRegDate", "Manufacturer", "ICAOTypeCode", "Type", "SerialNo", "PopularName", "GenericName", "AircraftClass", "Engines", "OwnershipStatus", 
@@ -75,10 +75,16 @@ namespace d1090dataLib.bsDB_connection
               // Print out the content of the text field:
               // System.Console.WriteLine("DEBUG Output: '" + sqlite_datareader["text"] + "'");
 
-              string icao = sqlite_datareader.GetString( 3 );
-              string regName = sqlite_datareader.GetValue( 6 ).ToString( );
-              string airctype = sqlite_datareader.GetValue( 13 ).ToString( );
-              string manufacturer = sqlite_datareader.GetValue( 12 ).ToString( );
+              var icao = sqlite_datareader.GetString( 3 ).ToUpperInvariant();
+              var regName = sqlite_datareader.GetValue( 6 ).ToString( ).ToUpperInvariant( );
+              var airctype = sqlite_datareader.GetValue( 13 ).ToString( ).ToUpperInvariant( );
+
+              var manufacturer = sqlite_datareader.GetValue( 12 ).ToString( );
+              var airctypename = sqlite_datareader.GetValue( 16 ).ToString( );
+
+              airctype = ( airctype == "0000" ) ? "" : airctype; // fix NULL
+              manufacturer = manufacturer.Replace( "'", "`" );  // cannot have single quotes for SQL (and don't want to escape...)
+              airctypename = airctypename.Replace( "'", "`" );  // cannot have single quotes for SQL (and don't want to escape...)
 
               var rec = new icaoRec( icao, regName, airctype, manufacturer );
               if ( rec.IsValid ) {

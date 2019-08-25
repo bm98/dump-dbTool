@@ -8,9 +8,10 @@ namespace d1090dataLib.d1090fa_dblib
   /// <summary>
   /// Reads BaseStation aircraft database in CSV format 
   /// </summary>
-  public class icaoBsReader
+  public class icaoCsvBsReader
   {
     private const string NULL = "NULL";
+    private static char[] WS = new char[] { ' ', '"' };
 
     /// <summary>
     /// Translates from native to generic record format
@@ -31,21 +32,20 @@ namespace d1090dataLib.d1090fa_dblib
       "UserString5", "UserInt1", "UserInt2", "UserInt3", "UserInt4", "UserInt5", "OperatorFlagCode"
        */
       // should be the CSV variant
-      string[] e = native.Split( new char[] { ',' } );
-      // FirstCreated	LastModified	ModeS	ModeSCountry	Registration	ICAOTypeCode	type_flight
-      string icao = "", regName = "", airctype = "", manufacturer ="";
+      string[] e = CsvTools.Split( native, out bool qquoted, ',' );
 
+      if ( e.Length < 14 ) return new icaoRec( "", "", "" );  // must read to ICAOTypeCode
 
-      if ( e.Length > 3 )
-        icao = e[3].Trim(new char[] { ' ', '"' }).ToUpperInvariant( );
-      if ( e.Length > 6 )
-        regName = e[6].Trim( new char[] { ' ', '"' } );
-      if ( e.Length > 13 )
-        airctype = e[13].Trim( new char[] { ' ', '"' } );
-      if ( e.Length > 12 )
-        manufacturer = e[12].Trim( new char[] { ' ', '"' } );
+      var icao = e[3].Trim( WS ).ToUpperInvariant( );             // ModeS
+      var regName = e[6].Trim( WS ).ToUpperInvariant( );          // Registration
+      var airctype = e[13].Trim( WS ).ToUpperInvariant( );        // ICAOTypeCode
+
+      var manufacturer = e[12].Trim( WS );                        // Manufacturer
+      var airctypename = e.Length > 16 ? e[16].Trim( WS ) : "";   // PopularName
 
       airctype = ( airctype == "0000" ) ? "" : airctype; // fix NULL
+      manufacturer = manufacturer.Replace( "'", "`" );  // cannot have single quotes for SQL (and don't want to escape...)
+      airctypename = airctypename.Replace( "'", "`" );  // cannot have single quotes for SQL (and don't want to escape...)
 
       return new icaoRec( icao, regName, airctype, manufacturer );
     }

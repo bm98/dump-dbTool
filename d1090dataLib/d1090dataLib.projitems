@@ -9,7 +9,7 @@
     <Import_RootNamespace>d1090dataLib</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)bsDB-connection\BaseStation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)bsDB-connection\BaseStationReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acCsvReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acCsvWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090ext-aclib\acDatabase.cs" />
@@ -40,13 +40,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtSqlWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtTable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090ext-rtlib\rtTsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\CsvTools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActCsvReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActDatabase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActDbWriter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActJSReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActRec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoActTable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoBsReader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoCsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoCsvBsReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoCsvAddonReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoCsvOpenSkyReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoCsvWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoDatabase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)d1090fa-dblib\icaoDbReader.cs" />

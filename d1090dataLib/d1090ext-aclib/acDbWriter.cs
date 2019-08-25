@@ -6,7 +6,7 @@ using System.Text;
 namespace d1090dataLib.d1090ext_aclib
 {
   /// <summary>
-  /// Writer for the Aircraft database
+  /// Writer for the Aircraft database (our own format - may be no longer used)
   /// Writes the FA Json formated data (many files with prefixed filenames)
   /// </summary>
   public class acDbWriter

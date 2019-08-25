@@ -6,7 +6,7 @@ using System.Text;
 namespace d1090dataLib.d1090ext_aclib
 {
   /// <summary>
-  /// Writes the database to a CSV file
+  /// Writes the database to a CSV file (our own format - may be no longer used)
   /// </summary>
   public class acCsvWriter
   {

@@ -6,7 +6,7 @@ using System.Text;
 namespace d1090dataLib.d1090ext_aclib
 {
   /// <summary>
-  /// Database table containing all icao aircraft records
+  /// Database table containing all icao aircraft records (our own format - may be no longer used)
   /// Handles the FA db with ModeS prefix for their Json file database
   /// </summary>
   public class acTable : SortedDictionary<string, acRec>

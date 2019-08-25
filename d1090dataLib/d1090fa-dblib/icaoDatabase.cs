@@ -39,9 +39,9 @@ namespace d1090dataLib.d1090fa_dblib
     public string Add( icaoRec rec )
     {
       if ( rec != null ) {
-        if ( rec.icao == "children" ) return ""; // get rid of special element
+        if ( rec.Icao == "children" ) return ""; // get rid of special element
 
-        char dbPrefix = rec.icao[0];
+        char dbPrefix = rec.Icao[0];
         return m_db[dbIndex( dbPrefix )].Add( rec );
       }
       return "";

@@ -12,8 +12,6 @@ namespace d1090dataLib.d1090ext_flightsDB
   /// </summary>
   public class FlightsDB
   {
-    private const string DATETIME = "yyyyMMddTHHmmss";
-
     /*
         CREATE TABLE "airports" (
             "apt_icao_code" TEXT NOT NULL,

@@ -99,7 +99,7 @@ namespace dumpDbBrowser
       OFD.Filter = "SQB files|*.sqb|All files|*.*";
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
-        var ir = new BaseStation( );
+        var ir = new BaseStationReader( );
         if ( !ir.Connect( file ) ) {
           RTB.Text += $"ERROR Reading BaseStation SQB database file: {file} - cannot open database\n";
         }
@@ -455,7 +455,7 @@ namespace dumpDbBrowser
       if ( OFD.ShowDialog( this ) == DialogResult.OK ) {
         string file = OFD.FileName;
         RTB.Text += $"Reading ICAO Aircraft Type Json Db: {file}\n";
-        string changes = icaoActReader.ReadDb( ref ACTDB, file );
+        string changes = icaoActJSReader.ReadDb( ref ACTDB, file );
         changes += $"DONE \n";
         changes += $"Database contains {ACTDB.Count} records \n";
         RTB.Text += changes;

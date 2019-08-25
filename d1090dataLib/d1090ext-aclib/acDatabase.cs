@@ -5,7 +5,7 @@ using System.Text;
 namespace d1090dataLib.d1090ext_aclib
 {
   /// <summary>
-  /// The icao Aircraft database
+  /// The icao Aircraft database (our own format - may be no longer used)
   /// Handles the FA db with ModeS prefix for their Json file database
   /// </summary>
   public class acDatabase

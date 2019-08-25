@@ -40,15 +40,21 @@ namespace dump1090_dbTool
     private const string regionFile = "myRegion.csv";             //  our own location and range (region center and radius [nm])
 
     private const string inputDirName = "input";
-    private const string basestationFile = "BaseStation.sqb";     // https://data.flightairmap.com/
-    private const string icaoAddFile = "ICAO-AircraftAddon.csv";  // our own addon data for the aircrafts database
-    private const string airportsFile = "airports.csv";           // http://ourairports.com/data/
-    private const string routesFile = "routes.tsv";               // https://data.flightairmap.com/
-    private const string navaidsFile = "navaids.csv";             // http://ourairports.com/data/
-    private const string xAirwaysFile = "earth_awy.dat";          // XPlane V11 default_data folder
-    private const string xFixesFile = "earth_fix.dat";            // XPlane V11 default_data folder
-    private const string xNavsFile = "earth_nav.dat";             // XPlane V11 default_data folder
-    private const string actFile = "ICAO-AircraftTypes.json";     // https://www.icao.int/publications/DOC8643 use http response...
+
+    private const string basestationFile = "BaseStation.sqb";       // https://data.flightairmap.com/
+    private const string icaoAcCsvFile = "aircraftDatabase.csv";    // https://opensky-network.org/datasets/metadata/
+    private const string icaoAddFile = "ICAO-AircraftAddon.csv";    // our own addon data for the aircrafts database
+
+    private const string actFileJS = "ICAO-AircraftTypes.json";     // https://www.icao.int/publications/DOC8643 use http response...
+    private const string actFileCsv = "doc8643AircraftTypes.csv";   // https://opensky-network.org/datasets/metadata/
+
+    private const string airportsFile = "airports.csv";             // http://ourairports.com/data/
+    private const string routesFile = "routes.tsv";                 // https://data.flightairmap.com/
+    private const string navaidsFile = "navaids.csv";               // http://ourairports.com/data/
+
+    private const string xAirwaysFile = "earth_awy.dat";            // XPlane V11 default_data folder
+    private const string xFixesFile = "earth_fix.dat";              // XPlane V11 default_data folder
+    private const string xNavsFile = "earth_nav.dat";               // XPlane V11 default_data folder
 
     // OUTPUT names
     private const string outputDirName = "output";
@@ -81,7 +87,6 @@ namespace dump1090_dbTool
 
     // in memory databases
     private static icaoDatabase IDB = new icaoDatabase( );
-    private static acDatabase ACDB = new acDatabase( );
     private static apDatabase APDB = new apDatabase( );
     private static rtDatabase RTDB = new rtDatabase( );
     private static navLib.navDatabase NAVDB = new navLib.navDatabase( );
@@ -92,10 +97,12 @@ namespace dump1090_dbTool
     // Job eval result (if true we can do it)
     private static bool jobAircrafts = false;       // create AC data
     private static bool jobAircraftsBS = false;     // read basestation
+    private static bool jobAircraftsCsv = false;    // read OSky Csv
     private static bool jobAircraftsAddon = false;  // read addon
     private static bool jobAircraftsFAout = false;  // create FA JSON DB
     private static bool jobAircraftsFAin = false;   // read FA JSON DB
-    private static bool jobAircraftTypes = false;   // create FA aircraft types JSON DB
+    private static bool jobAircraftTypesJS = false;   // create FA aircraft types from Json file
+    private static bool jobAircraftTypesCsv = false;  // create FA aircraft types from Csv file
     private static bool jobFlights = false;
     private static bool jobNavs = false;
     private static bool jobAirports = false;
@@ -190,7 +197,7 @@ namespace dump1090_dbTool
       // read BaseStation.sqb
       if ( jobAircraftsBS ) {
         string file = Path.Combine( inputDir, basestationFile );
-        var ir = new BaseStation( );
+        var ir = new BaseStationReader( );
         if ( !ir.Connect( file ) ) {
           Console.WriteLine( $"ERROR Reading BaseStation SQB database file: {file} - cannot open database" );
         }
@@ -201,11 +208,19 @@ namespace dump1090_dbTool
         }
       }
 
+      // read OSky aircrafts
+      if ( jobAircraftsCsv ) {
+        string file = Path.Combine( inputDir, icaoAcCsvFile );
+        Console.WriteLine( $"Reading ICAO Aircraft OpenSky CSV file: {file}" );
+        Console.WriteLine( icaoCsvOpenSkyReader.ReadDb( ref IDB, file ) );
+        Console.WriteLine( $"DONE - ICAO ModeS Database Database contains {IDB.Count} records\n" );
+      }
+
       // read manual additions
       if ( jobAircraftsAddon ) {
         string file = Path.Combine( inputDir, icaoAddFile );
         Console.WriteLine( $"Reading ICAO Aircraft Addon CSV file: {file}" );
-        Console.WriteLine( icaoCsvReader.ReadDb( ref IDB, file ) );
+        Console.WriteLine( icaoCsvAddonReader.ReadDb( ref IDB, file ) );
         Console.WriteLine( $"DONE - ICAO ModeS Database Database contains {IDB.Count} records\n" );
       }
 
@@ -248,13 +263,23 @@ namespace dump1090_dbTool
     // Write into web aircraft types dump1090fa compatible JSON database
     private static void DoAircraftTypesJob()
     {
-      if ( !jobAircraftTypes ) return;
+      if ( !(jobAircraftTypesJS || jobAircraftTypesCsv) ) return;
       Console.WriteLine( $"\nCreating dump1090fa compatible aircraft types database .." );
 
-      string file = Path.Combine( inputDir, actFile );
-      Console.WriteLine( $"Reading ICAO Aircraft Types json file: {file}" );
-      Console.WriteLine( icaoActReader.ReadDb( ref ACTDB, file ) );
-      Console.WriteLine( $"DONE - ICAO Aircraft Types Database contains {ACTDB.Count} records\n" );
+      if ( jobAircraftTypesJS ) {
+        string file = Path.Combine( inputDir, actFileJS );
+        Console.WriteLine( $"Reading ICAO Aircraft Types json file: {file}" );
+        Console.WriteLine( icaoActJSReader.ReadDb( ref ACTDB, file ) );
+        Console.WriteLine( $"DONE - ICAO Aircraft Types Database contains {ACTDB.Count} records\n" );
+      }
+
+      if ( jobAircraftTypesCsv ) {
+        string file = Path.Combine( inputDir, actFileCsv );
+        Console.WriteLine( $"Reading ICAO Aircraft Types csv file: {file}" );
+        Console.WriteLine( icaoActCsvReader.ReadDb( ref ACTDB, file ) );
+        Console.WriteLine( $"DONE - ICAO Aircraft Types Database contains {ACTDB.Count} records\n" );
+      }
+
       // Create now
       if ( ACTDB.Count <= 0 ) {
         Console.WriteLine( $"ERROR - No Aircraft Type records found, load populated ICAO Aircraft Types first\n" );
@@ -441,16 +466,22 @@ namespace dump1090_dbTool
       inputDir = Path.Combine( buildDir, inputDirName );
 
       // create dump1090fa-aircrafts.sqb
-      //  - needs input\BaseStation.sqb and/or (FA input db if -fa) and/or ICAO-AircraftAddon.csv (our own addons)
-      jobAircraftsAddon = File.Exists( Path.Combine( inputDir, icaoAddFile ) );
+      //  - needs input\BaseStation.sqb 
+      //    and /or (aircraftDatabase.csv) 
+      //    and /or (FA input db if -fa) 
+      //    and /or ICAO-AircraftAddon.csv (our own addons)
       jobAircraftsBS = File.Exists( Path.Combine( inputDir, basestationFile ) );
+      jobAircraftsCsv = File.Exists( Path.Combine( inputDir, icaoAcCsvFile) );
       jobAircraftsFAin = Directory.Exists( Path.Combine( inputDir, faDbDirName ) );
-      jobAircrafts = argFAdb && jobAircraftsBS || jobAircraftsFAin || jobAircraftsAddon;
+      jobAircraftsAddon = File.Exists( Path.Combine( inputDir, icaoAddFile ) );
+
+      jobAircrafts = (argFAdb && jobAircraftsFAin )|| jobAircraftsBS || jobAircraftsCsv || jobAircraftsAddon;
       jobAircraftsFAout = jobAircrafts && argFAdb; // must create FA db if we can to aircrafts only
 
       // create icao_aircraft_types.json
-      //  - needs input\ICAO-AircraftTypes.json
-      jobAircraftTypes = File.Exists( Path.Combine( inputDir, actFile ) );
+      //  - needs input\ICAO-AircraftTypes.json and/or doc8643AircraftTypes.csv
+      jobAircraftTypesJS = File.Exists( Path.Combine( inputDir, actFileJS ) );
+      jobAircraftTypesCsv = File.Exists( Path.Combine( inputDir, actFileCsv ) );
 
       // create dump1090fa-flights.sqb
       //  - needs input\airports.csv

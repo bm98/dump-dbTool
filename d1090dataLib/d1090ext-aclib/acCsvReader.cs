@@ -6,7 +6,7 @@ using System.Text;
 namespace d1090dataLib.d1090ext_aclib
 {
   /// <summary>
-  /// Reads aircraft database in CSV format 
+  /// Reads aircraft database in CSV format (our own format - may be no longer used)
   /// </summary>
   public class acCsvReader
   {

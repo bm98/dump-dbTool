@@ -46,17 +46,17 @@ namespace d1090dataLib.d1090fa_dblib
       string ret = "";
       if ( rec != null ) {
         // sanity.. modeS ID must be 6 chars
-        if ( rec.icao.Length == 6 ) {
-          if ( !this.ContainsKey( rec.icao ) ) {
-            this.Add( rec.icao, rec );
+        if ( rec.Icao.Length == 6 ) {
+          if ( !this.ContainsKey( rec.Icao ) ) {
+            this.Add( rec.Icao, rec );
           }
           else {
             // For existing records overwrite if data is provided (reg and type is expected to be delivered anyway)
-            this[rec.icao].registration = rec.registration;
-            this[rec.icao].airctype = rec.airctype;
-            this[rec.icao].manufacturer = string.IsNullOrEmpty( rec.manufacturer ) ? this[rec.icao].manufacturer : rec.manufacturer;
-            this[rec.icao].airctypedesc = string.IsNullOrEmpty( rec.airctypedesc ) ? this[rec.icao].airctypedesc : rec.airctypedesc;
-            this[rec.icao].operator_ = string.IsNullOrEmpty( rec.operator_ ) ? this[rec.icao].operator_ : rec.operator_;
+            this[rec.Icao].Registration = rec.Registration;
+            this[rec.Icao].AircTypeCode = rec.AircTypeCode;
+            this[rec.Icao].ManufacturerName = string.IsNullOrEmpty( rec.ManufacturerName ) ? this[rec.Icao].ManufacturerName : rec.ManufacturerName;
+            this[rec.Icao].AircTypeName = string.IsNullOrEmpty( rec.AircTypeName ) ? this[rec.Icao].AircTypeName : rec.AircTypeName;
+            this[rec.Icao].OperatorName = string.IsNullOrEmpty( rec.OperatorName ) ? this[rec.Icao].OperatorName : rec.OperatorName;
           }
         }
       }

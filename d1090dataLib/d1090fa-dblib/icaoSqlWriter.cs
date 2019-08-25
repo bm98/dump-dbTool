@@ -24,7 +24,7 @@ namespace d1090dataLib.d1090fa_dblib
       using ( SQLiteCommand sqlite_cmd = sqConnection.CreateCommand( ) ) {
         foreach ( var rec in subTable ) {
           sqlite_cmd.CommandText = "INSERT INTO fa_modes (icao, registration,airctype,manufacturer,aircname,operator_)"
-            + $" VALUES ('{rec.Value.icao}','{rec.Value.registration}','{rec.Value.airctype}','{rec.Value.manufacturer}','{rec.Value.airctypedesc}','{rec.Value.operator_}');";
+            + $" VALUES ('{rec.Value.Icao}','{rec.Value.Registration}','{rec.Value.AircTypeCode}','{rec.Value.ManufacturerName}','{rec.Value.AircTypeName}','{rec.Value.OperatorName}');";
           sqlite_cmd.ExecuteNonQuery( );
         }
       }

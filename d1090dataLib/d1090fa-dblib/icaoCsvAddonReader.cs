@@ -6,9 +6,11 @@ using System.Text;
 namespace d1090dataLib.d1090fa_dblib
 {
   /// <summary>
-  /// Reads minimum CSV aircraft data 
+  /// Reads minimum CSV aircraft data "ICAO-AircraftAddon.csv"
+  /// CSV:  icao,registration,airctype
+  ///       70C105,A40-SI,B789
   /// </summary>
-  public class icaoCsvReader
+  public class icaoCsvAddonReader
   {
 
     /// <summary>
@@ -18,7 +20,7 @@ namespace d1090dataLib.d1090fa_dblib
     /// <returns></returns>
     private static icaoRec FromNative( string native )
     {
-      // should be the TSV variant
+      // should be the CSV variant
       string[] e = native.Split( new char[] { ',', ';' } ); // either comma or semi separated
       //     0       1          2    
       //   icao,registration,airctype
@@ -46,6 +48,10 @@ namespace d1090dataLib.d1090fa_dblib
     /// <returns>The result string, either empty or error</returns>
     private static string ReadDbFile( ref icaoDatabase db, string fName )
     {
+      if ( !File.Exists( fName ) ) {
+        return $"File {fName} does not exist\n";
+      }
+
       string ret = "";
       using ( var sr = new StreamReader( fName ) ) {
         string buffer = sr.ReadLine( ); // header line

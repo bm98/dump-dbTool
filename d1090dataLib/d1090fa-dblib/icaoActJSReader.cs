@@ -23,24 +23,25 @@ namespace d1090dataLib.d1090fa_dblib
   ///    ...
   ///  ]
   /// </summary>
-  public class icaoActReader
+  public class icaoActJSReader
   {
     /// <summary>
     /// Returns a new Icao Record from given Jason
     /// </summary>
-    /// <param name="js">The record as Jason fragment</param>
-    private static icaoActRec FromNative( string js )
+    /// <param name="native">The record as Jason fragment</param>
+    private static icaoActRec FromNative( string native )
     {
-      JsonRecord jRec = JsonParser.Decompose( js );
+      JsonRecord jRec = JsonParser.Decompose( native );
       if ( jRec?.Count > 0 ) {
-        var icao = !jRec.Values[0].ContainsKey( "Designator" ) ? "" : jRec.Values[0]["Designator"];
-        var desc = !jRec.Values[0].ContainsKey( "Description" ) ? "" : jRec.Values[0]["Description"];
-        var wtc = !jRec.Values[0].ContainsKey( "WTC" ) ? "" : jRec.Values[0]["WTC"];
+        var icao = !jRec.Values[0].ContainsKey( "Designator" ) ? "" : jRec.Values[0]["Designator"].ToUpperInvariant( );
+        var desc = !jRec.Values[0].ContainsKey( "Description" ) ? "" : jRec.Values[0]["Description"].ToUpperInvariant( );
+        var wtc = !jRec.Values[0].ContainsKey( "WTC" ) ? "" : jRec.Values[0]["WTC"].ToUpperInvariant( );
         var mfn = !jRec.Values[0].ContainsKey( "ModelFullName" ) ? "" : jRec.Values[0]["ModelFullName"];
-        var mcod = !jRec.Values[0].ContainsKey( "ManufacturerCode" ) ? "" : jRec.Values[0]["ManufacturerCode"];
+        var mcod = !jRec.Values[0].ContainsKey( "ManufacturerCode" ) ? "" : jRec.Values[0]["ManufacturerCode"].ToUpperInvariant( );
         var acd = !jRec.Values[0].ContainsKey( "AircraftDescription" ) ? "" : jRec.Values[0]["AircraftDescription"];
         var ec = !jRec.Values[0].ContainsKey( "EngineCount" ) ? "" : jRec.Values[0]["EngineCount"];
         var et = !jRec.Values[0].ContainsKey( "EngineType" ) ? "" : jRec.Values[0]["EngineType"];
+
         var iRec = new icaoActRec( icao.ToUpperInvariant( ), desc, wtc, mfn, mcod, acd, ec, et );
         return iRec;
       }
@@ -51,10 +52,10 @@ namespace d1090dataLib.d1090fa_dblib
 
 
     /// <summary>
-    /// Reads all data from the given folder
+    /// Reads all data from the given file
     /// </summary>
     /// <param name="db">The icaoActDatabase to fill</param>
-    /// <param name="dbFolder">A fully qualified name</param>
+    /// <param name="fName">A fully qualified name</param>
     /// <returns>The result string, either empty or error</returns>
     public static string ReadDb( ref icaoActDatabase db, string fName )
     {

@@ -11,8 +11,6 @@ namespace d1090dataLib.d1090ext_aircraftsDB
   /// </summary>
   public class AircraftsDB
   {
-    private const string DATETIME = "yyyyMMddTHHmmss";
-
     /*
      * CREATE TABLE "fa_modes" ("icao" TEXT NOT NULL, "registration" TEXT, "airctype" TEXT, "manufacturer" TEXT, "aircname" TEXT, "operator_" TEXT ); 
      * CREATE UNIQUE INDEX "i_fa_icao" on fa_modes (icao ASC);

@@ -16,9 +16,9 @@ namespace d1090fa_dblib.test
     public void T_cTor1()
     {
       var retVal = new icaoRec( "01AA10", "V5-NAM", "F900" );
-      Assert.AreEqual<string>( "01AA10", retVal.icao );
-      Assert.AreEqual<string>( "V5-NAM", retVal.registration );
-      Assert.AreEqual<string>( "F900", retVal.airctype );
+      Assert.AreEqual<string>( "01AA10", retVal.Icao );
+      Assert.AreEqual<string>( "V5-NAM", retVal.Registration );
+      Assert.AreEqual<string>( "F900", retVal.AircTypeCode );
     }
 
 

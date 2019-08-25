@@ -20,12 +20,14 @@ namespace d1090dataLib.d1090fa_dblib
 
 
     // fields in db
-    public string icao = "";
-    public string registration = "";
-    public string airctype = "";
-    public string manufacturer = "";
-    public string airctypedesc = "";
-    public string operator_ = "";
+    // minimum mandatory
+    public string Icao = "";              // ModeS ID (71002B)
+    public string Registration = "";      // Registration No (HZ-ARC)
+    public string AircTypeCode = "";      // Aircraft Type Code (B789)
+    // optional if available
+    public string ManufacturerName = "";  // Manufacturer Name (Boeing)
+    public string AircTypeName = "";      // Aircraft Type Name (787 9)
+    public string OperatorName = "";      // any of the operator designations
 
     /// <summary>
     /// Sanity check on icao (ModeS) codes
@@ -48,9 +50,9 @@ namespace d1090dataLib.d1090fa_dblib
     /// <param name="t">icao type code</param>
     public icaoRec( string ic, string r, string t )
     {
-      icao = icaoSanity(ic);
-      registration = r;  // remove null recs from aircraft db
-      airctype = t.ToUpperInvariant();
+      Icao = icaoSanity(ic);
+      Registration = r;  // remove null recs from aircraft db
+      AircTypeCode = t.ToUpperInvariant();
     }
 
     /// <summary>
@@ -62,10 +64,10 @@ namespace d1090dataLib.d1090fa_dblib
     /// <param name="m">Manufacturer</param>
     public icaoRec( string ic, string r, string t, string m )
     {
-      icao = icaoSanity( ic );
-      registration = r;
-      airctype = t.ToUpperInvariant( );
-      manufacturer = m;
+      Icao = icaoSanity( ic );
+      Registration = r;
+      AircTypeCode = t.ToUpperInvariant( );
+      ManufacturerName = m;
     }
 
     /// <summary>
@@ -74,7 +76,7 @@ namespace d1090dataLib.d1090fa_dblib
     /// <param name="prefix">The filename prefix missing from the native record</param>
     public void AddPrefix(string prefix )
     {
-      this.icao = icaoSanity( prefix + this.icao );
+      this.Icao = icaoSanity( prefix + this.Icao );
     }
 
     /// <summary>
@@ -83,18 +85,18 @@ namespace d1090dataLib.d1090fa_dblib
     /// <param name="ac"></param>
     public void Update( acRec ac )
     {
-      if ( ac.icao_code != this.icao ) return; // sanity
+      if ( ac.icao_code != this.Icao ) return; // sanity
 
-      registration = ( string.IsNullOrEmpty( registration ) ) ? ac.regid : registration; // this has precedence
-      airctype = ( string.IsNullOrEmpty( airctype ) ) ? ac.model : airctype; // this has precedence
-      airctypedesc = ( string.IsNullOrEmpty( airctypedesc ) ) ? ac.typedesc : airctypedesc; // this has precedence
-      operator_ = ( string.IsNullOrEmpty( operator_ ) ) ? ac.operator_ : operator_; // this has precedence
+      Registration = ( string.IsNullOrEmpty( Registration ) ) ? ac.regid : Registration; // this has precedence
+      AircTypeCode = ( string.IsNullOrEmpty( AircTypeCode ) ) ? ac.model : AircTypeCode; // this has precedence
+      AircTypeName = ( string.IsNullOrEmpty( AircTypeName ) ) ? ac.typedesc : AircTypeName; // this has precedence
+      OperatorName = ( string.IsNullOrEmpty( OperatorName ) ) ? ac.operator_ : OperatorName; // this has precedence
     }
 
     /// <summary>
     /// returns true if the record is valid
     /// </summary>
-    public bool IsValid { get => ( icao.Length == 6 ); } // FAIL length does not match
+    public bool IsValid { get => ( Icao.Length == 6 ); } // FAIL length does not match
 
     /// <summary>
     /// Returns the content in Json Notation for csv use
@@ -103,12 +105,12 @@ namespace d1090dataLib.d1090fa_dblib
     /// <returns>The Json database record</returns>
     public string AsJson()
     {
-      string ret = $"\"{icao}\":{{";
-      if ( !string.IsNullOrEmpty( registration ) ) ret += $"\"r\":\"{registration}\",";
-      if ( !string.IsNullOrEmpty( airctype ) ) ret += $"\"t\":\"{airctype}\",";
-      if ( !string.IsNullOrEmpty( manufacturer ) ) ret += $"\"m\":\"{manufacturer}\",";
-      if ( !string.IsNullOrEmpty( airctypedesc ) ) ret += $"\"td\":\"{airctypedesc}\",";
-      if ( !string.IsNullOrEmpty( operator_ ) ) ret += $"\"o\":\"{operator_}\",";
+      string ret = $"\"{Icao}\":{{";
+      if ( !string.IsNullOrEmpty( Registration ) ) ret += $"\"r\":\"{Registration}\",";
+      if ( !string.IsNullOrEmpty( AircTypeCode ) ) ret += $"\"t\":\"{AircTypeCode}\",";
+      if ( !string.IsNullOrEmpty( ManufacturerName ) ) ret += $"\"m\":\"{ManufacturerName}\",";
+      if ( !string.IsNullOrEmpty( AircTypeName ) ) ret += $"\"td\":\"{AircTypeName}\",";
+      if ( !string.IsNullOrEmpty( OperatorName ) ) ret += $"\"o\":\"{OperatorName}\",";
 
       if ( ret.EndsWith( "," ) )
         ret = ret.Substring( 0, ret.Length - 1 ); // remove last comma
@@ -123,16 +125,16 @@ namespace d1090dataLib.d1090fa_dblib
     /// <returns>The Json database record</returns>
     public string AsJson( string prefix )
     {
-      if ( !icao.StartsWith( prefix ) ) {
+      if ( !Icao.StartsWith( prefix ) ) {
         // PROGRAM ERROR...
         ; // stop in debugger
       }
-      var tIcao = icao.Substring( prefix.Length ); // cut the prefix from the record
+      var tIcao = Icao.Substring( prefix.Length ); // cut the prefix from the record
 
 
       string ret = $"\"{tIcao}\":{{";
-      if ( !string.IsNullOrEmpty( registration ) ) ret += $"\"r\":\"{registration}\",";
-      if ( !string.IsNullOrEmpty( airctype ) ) ret += $"\"t\":\"{airctype}\",";
+      if ( !string.IsNullOrEmpty( Registration ) ) ret += $"\"r\":\"{Registration}\",";
+      if ( !string.IsNullOrEmpty( AircTypeCode ) ) ret += $"\"t\":\"{AircTypeCode}\",";
 
       if ( ret.EndsWith( "," ) )
         ret = ret.Substring( 0, ret.Length - 1 ); // remove last comma
@@ -152,7 +154,7 @@ namespace d1090dataLib.d1090fa_dblib
     /// <returns>The CSV database record</returns>
     public string AsJsonXsv()
     {
-      string ret = $"{icao}{XDIV}{AsJson( )}";
+      string ret = $"{Icao}{XDIV}{AsJson( )}";
       return ret;
     }
 
@@ -167,12 +169,12 @@ namespace d1090dataLib.d1090fa_dblib
     /// <returns>The CSV database record</returns>
     public string AsCsv()
     {
-      string ret = $"{icao},";
-      ret += ( !string.IsNullOrEmpty( registration ) ) ? $"{registration}," : ",";
-      ret += ( !string.IsNullOrEmpty( airctype ) ) ? $"{airctype}," : ",";
-      ret += ( !string.IsNullOrEmpty( manufacturer ) ) ? $"{manufacturer}," : ",";
-      ret += ( !string.IsNullOrEmpty( airctypedesc ) ) ? $"{airctypedesc}," : ",";
-      ret += ( !string.IsNullOrEmpty( operator_ ) ) ? $"{operator_}," : ",";
+      string ret = $"{Icao},";
+      ret += ( !string.IsNullOrEmpty( Registration ) ) ? $"{Registration}," : ",";
+      ret += ( !string.IsNullOrEmpty( AircTypeCode ) ) ? $"{AircTypeCode}," : ",";
+      ret += ( !string.IsNullOrEmpty( ManufacturerName ) ) ? $"{ManufacturerName}," : ",";
+      ret += ( !string.IsNullOrEmpty( AircTypeName ) ) ? $"{AircTypeName}," : ",";
+      ret += ( !string.IsNullOrEmpty( OperatorName ) ) ? $"{OperatorName}," : ",";
       if ( ret.EndsWith( "," ) )
         ret = ret.Substring( 0, ret.Length - 1 ); // remove last comma
       return ret;

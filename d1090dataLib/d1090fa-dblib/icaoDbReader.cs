@@ -24,7 +24,7 @@ namespace d1090dataLib.d1090fa_dblib
         return iRec;
       }
       else {
-        return null;
+        return new icaoRec( "", "", "" ); 
       }
     }
 

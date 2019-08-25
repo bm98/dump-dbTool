@@ -3,7 +3,7 @@
 namespace d1090dataLib.d1090ext_aclib
 {
   /// <summary>
-  /// An Aircraft Record
+  /// An Aircraft Record (our own format - may be no longer used)
   /// </summary>
   public class acRec
   {
